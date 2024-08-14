@@ -1,9 +1,13 @@
 ﻿
 & .\.venv\Scripts\Activate.ps1
-    
+
 switch ($args[0]) {
-    # 預設行為
+    # 預設行為2
     "" {
+        Push-Location .\frontend
+        Start-Process -NoNewWindow -FilePath "cmd" -ArgumentList "/c yarn dev"
+        Pop-Location
+        
         python .\backend\manage.py makemigrations $args[1]
         python .\backend\manage.py migrate $args[1]
         python .\backend\manage.py runserver

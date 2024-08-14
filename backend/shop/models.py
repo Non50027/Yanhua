@@ -2,7 +2,7 @@ import os
 from uuid import uuid4
 from django.utils import timezone
 from django.db import models
-from login.models import User
+from member.models import User
 
 # 訂單
 class Order(models.Model):

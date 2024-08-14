@@ -10,12 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
+import os, json
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
+# 讀取 .env
+def load_env(file_path):
+    with open(file_path) as f:
+        for line in f:
+            if line.startswith('#') or '=' not in line:
+                continue
+            key, value = line.strip().split('=', 1)
+            os.environ[key] = value
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+load_env(os.path.join(BASE_DIR, '.env'))
 
 MEDIA_URL= '/product_img/'
 
@@ -32,12 +43,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Vue 預設的端口是 3000
+]
 # Application definition
 
 MY_APPS= [
-    'login',
+    'member',
     'shop',
+    'rest_framework',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = MY_APPS+ [
@@ -57,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -85,8 +101,12 @@ TEMPLATES = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # 使用 MySQL/MariaDB 的後端
+        'NAME': os.getenv('DB_NAME'),          # 資料庫名稱
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '10330',
     }
 }
 

@@ -7,18 +7,24 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+
+Thumbs.db
+desktop.ini
 
 # Editor directories and files
-.vscode/*
+frontend/.vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+run.bat
+run.ps1
+.env

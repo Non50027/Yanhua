@@ -1,30 +1,67 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+
+    <div>
+      {{message}}
+    </div>
+
+    <div>
+      <button @click= "change(1)">type1</button>
+      <button @click= "change(2)">type2</button>
+      <button @click= "change(3)">type3</button>
+      
+    </div>
+
+    <div class= 'type1' v-if= 'view== 1'>
+      
+      <home></home>
+      {{ test }}
+    </div>
+
+    <div class= 'type2' v-else-if= 'view== 2'>
+
+      <input type="text" v-model="text">
+      <p>{{text}}</p>
+    </div>
+
+    <div v-else>no view</div>
+
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  
 </template>
 
+<script setup>
+import axios from "axios"
+import { ref, onMounted } from 'vue'
+import home from './components/home.vue'
+const test= '烟花'
+const text = ref('蹦蹦蹦')
+const view= ref(1)
+const change= (num)=> {
+  view.value= num
+}
+
+const message= ref('123')
+
+onMounted(() => {
+  axios.get('http://127.0.0.1:8000/member/hello/')
+    .then(response => {
+      message.value = response.data.message;  // 正確地更新 message 的值
+    })
+    .catch(error => {
+      console.error('There was an error!', error);
+    });
+})
+
+
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.type1 {
+  border: 2px rgb(235, 155, 235) solid;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.type2 {
+  border: 2px rgb(109, 243, 214) solid;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+</style>>
+
