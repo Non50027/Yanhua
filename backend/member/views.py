@@ -1,27 +1,144 @@
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.contrib.auth.hashers import check_password
+from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import render_to_string
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+from .models import Member
+from .serializers import MemberSerializer, CreateMemberSerializer
+from decorators import try_except
 
-# 註冊
-def register():
-    pass
+# 註冊 register/
+@api_view(['POST'])
+@try_except
+def save_member(request):
+    
+    serializer= CreateMemberSerializer(data= request.data)
+    
+    # print(request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": f"save member {serializer.data['name']}"}, status= status.HTTP_201_CREATED)
+    
+    else:
+        raise ValidationError(serializer.errors)
 
-# 修改會員資料
-def edit_data():
-    pass
+# 發送驗證信
+@api_view(['POST'])
+@try_except
+def verification_email(request):
+    
+    # 取得會員資料
+    member= Member.objects.get(name= request.POST.get('name'))
+    
+    # 生成一個專屬身分令牌
+    token= default_token_generator.make_token(member)
+    # 加密會員 ID
+    uid= urlsafe_base64_encode(force_bytes(member.pk))
+    # 生成驗證連結
+    verification_link= request.build_absolute_uri(f'/activate/{uid}/{token}/')
+    
+    title= '成為合格認證的小羊'
+    message= render_to_string('verification_email.html', {
+        'user': member,
+        'verification_link': verification_link,
+    })
+    send_mail(
+        title,
+        message,
+        settings.EMAIL_HOST_USER,
+        [member.email],
+        fail_silently= False,
+    )
 
-# 登入
-def login():
-    pass
+# 驗證透過連結點進來的會員
+@api_view(['GET'])
+@try_except
+def activate_account(request, uidb64, token):
+    
+    uid= force_str(urlsafe_base64_decode(uidb64))
+    member= Member.objects.get(pk= uid)
+    
+    if default_token_generator.check_token(member, token):
+        member.verification= True
+        member.save()
+        return Response({"message": "信箱驗證成功！", 'data': member}, status= status.HTTP_200_OK)
+    else:
+        return Response({"error": "無效的驗證連結"}, status= status.HTTP_400_BAD_REQUEST)
 
-# 登出
+# 修改會員資料 edit_data/
+@api_view(['PUT'])
+@try_except
+def edit_data(request):
+    
+    member= Member.objects.get(name= request.session['name'])
+    
+    serializer= MemberSerializer(member, data= request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "更改成功", 'data': serializer.data}, status= status.HTTP_200_OK)
+    
+    else:
+        raise ValidationError(serializer.errors)
+    
+# 登入 login/
+@api_view(['POST'])
+@try_except
+def login(request):
+    member= Member.objects.get(name= request.get('name'))
+    
+    if check_password(request.data.get('password'), member.password):
+        return Response({'message': "OK"})
+    else:
+        return Response({'error': '密碼不正確'}, status= status.HTTP_400_BAD_REQUEST)
+
+
+# 登出 logout/
 def logout():
     pass
 
-# 取得所有會員資料
-def get_data():
-    pass
-
+# 取得所有會員資料 get_data/
 @api_view(['GET'])
-def hello_world(request):
-    return Response({"message": "Hello, world!"})
+@try_except
+def get_data(request):
+    # '''
+    all_data= []
+    for member in Member.objects.all().iterator():
+        data= {
+            'name': member.name,
+            'display_name': member.display_name,
+            'email': member.email,
+            'address': member.address,
+            'tel': member.tel,
+            'created_at': member.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'role': member.role,
+            'orders':[
+                {
+                    'id': order.id,
+                    'status': order.status,
+                    'created_at': order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'total_amount': order.total_amount,
+                    'address': order.address,
+                    'tel': order.tel,
+                    'items': [
+                        {
+                            'name': item.product.name,
+                            'price': item.product.price,
+                            'count': item.count,
+                        }
+                        for item in order.item_set.all()
+                    ]
+                } for order in member.order.all()
+            ]
+        }
+        all_data.append(data)
+    return Response(all_data)
+    # '''
+    # all_data= [MemberSerializer(member).data for member in Member.objects.all().iterator()]
+    # return Response(all_data)

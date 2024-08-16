@@ -439,6 +439,11 @@ vite@^5.4.0:
   optionalDependencies:
     fsevents "~2.3.3"
 
+vue-cookies@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.8.4.tgz#50ce538b3a66109b484936ae3ecc4677b8f21540"
+  integrity sha512-9zjvACKE4W0kEb8OQtXzpizKhf6zfFOG/Z1TEUjSJn4Z4rintuAHo8y/FpCUhTWHMmPe8E+Fko+/tiXVM+5jOw==
+
 vue@^3.4.35:
   version "3.4.37"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.4.37.tgz#64ce0eeb8de16a29fb74e504777ee8c0c1cf229e"
