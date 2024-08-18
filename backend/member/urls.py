@@ -1,12 +1,10 @@
 from django.urls import path
+# from append_local.views import test
+
 from member import views
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.views.generic import TemplateView # type: ignore
 
-img= static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
-
-
-urlpatterns= [
+urlpatterns = [
     
     path("register/", views.save_member, name= "save_member"),
     path("edit_data/", views.edit_data, name= "edit_data"),
@@ -17,4 +15,4 @@ urlpatterns= [
     path("verification/", views.verification_email, name= "verification_email"),
     path("verification/<uidb64>/<token>/", views.activate_account, name= "activate_account"),
     
-]+ img
+]

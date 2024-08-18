@@ -7,7 +7,7 @@
       </div>
       <home />
     </div>
-
+  
 </template>
 
 <script setup>
@@ -43,7 +43,12 @@ const isMember= ()=>{
 
 </script>
 
-<style>
-
+<style scoped>
+.type1 {
+  border: 2px rgb(235, 155, 235) solid;
+}
+.type2 {
+  border: 2px rgb(109, 243, 214) solid;
+}
 </style>>
 
