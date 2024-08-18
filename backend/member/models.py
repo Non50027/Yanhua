@@ -5,7 +5,7 @@ import re
 
 def icon_name(instance, file_name):
         file_name= f"{instance.name}.{file_name.split('.')[-1]}"
-        return os.path.join('static/member/', file_name)
+        return os.path.join('member/', file_name)
     
 # 會員
 class Member(models.Model):
@@ -16,14 +16,14 @@ class Member(models.Model):
         MEMBER= 'member', '小羊'
     
     name= models.CharField(max_length= 50, unique= True, error_messages= {'unique': '已有重複帳號...禁止冒名頂替'})
-    display_name= models.CharField(max_length= 50, null= True, blank= True)
+    display_name= models.CharField(max_length= 50, null= True, blank= True, default='')
     icon= models.ImageField(upload_to= icon_name, blank= True, null= True)
     email= models.EmailField(unique= True, error_messages= {'unique': "有人用摟"})
     verification= models.BooleanField(default= False, blank= True)
     password= models.CharField(max_length= 255)
     created_at= models.DateTimeField(auto_now_add= True)
-    address= models.TextField(max_length= 255, null= True, blank= True)
-    tel= models.CharField(max_length= 12, null= True, blank= True)
+    address= models.TextField(max_length= 255, null= True, blank= True, default='')
+    tel= models.CharField(max_length= 12, null= True, blank= True, default='')
     role= models.CharField(max_length= 10, choices= Role.choices, default= Role.MEMBER, blank= True) 
     
     

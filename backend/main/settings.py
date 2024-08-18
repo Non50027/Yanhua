@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 load_env(os.path.join(BASE_DIR, '.env'))
 
-MEDIA_URL= '/product_img/'
+MEDIA_URL= 'http://localhost:8000/static/'
 
-MEDIA_ROOT= os.path.join(BASE_DIR, 'static/product')
+MEDIA_ROOT= os.path.join(BASE_DIR, '/YanHua/static/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

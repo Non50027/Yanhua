@@ -18,7 +18,7 @@ def try_except(functionName):
             # 處理會員資料
             except Member.DoesNotExist as e:
                 print('未發現小羊')
-                return Response({'error': '未發現小羊'}, status= status.HTTP_404_NOT_FOUND)
+                return Response({'error': {'name':['未發現小羊']}}, status= status.HTTP_404_NOT_FOUND)
             
             # 處理其他資料
             except ObjectDoesNotExist as e:

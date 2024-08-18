@@ -1,40 +1,45 @@
 <template>
-    <div >
-      <div v-if="!isLoggedIn">
-        <button @click='buttonLogin= !buttonLogin'>註冊</button>
-        <register v-if="buttonLogin" :isLogin='buttonLogin' @login-success="handleLoginSuccess"></register>
+    <div>
+      <div>
+        <button @click='showForm= !showForm'>{{isLogin? (showForm? (memberData.display_name? memberData.display_name: memberData.name): "返回"): (showForm? "不想戴":"戴上命名牌")}}</button>
+        <login v-if="showForm && !isLogin" @login-success="isMember"></login>
+        <member v-if="!showForm && isLogin" :data='memberData' />
       </div>
       <home />
-
-
-      <!-- <input type="text" v-model= 'msg'>
-      <br>
-      <test :msg= 'msg' @update= 'updateHandler'></test> -->
-
     </div>
 
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import home from './components/home.vue'
-import register from './member/register.vue'
+import { ref, reactive, onUpdated } from 'vue'
+import axios from "axios"
 
-const buttonLogin = ref(false)
-const isLoggedIn = ref(!!sessionStorage.getItem('name'))
+const showForm = ref(false)
+const isLogin = ref(!!sessionStorage.getItem('name'))
+const memberData= reactive({})
 
-const handleLoginSuccess = () => {
-    isLoggedIn.value = !!sessionStorage.getItem('name')
+onUpdated(()=>{
+  const name= sessionStorage.getItem('name')
+  axios.get(`http://localhost:8000/member/data/?name=${name}`)
+  .then(response=> {{
+    Object.assign(memberData, response.data)
+  }})
+  .catch(error=> {
+    console.log(error)
+  })
+})
+
+const isMember= ()=>{
+  isLogin.value = !isLogin.value
+  const name= sessionStorage.getItem('name')
+  axios.get(`http://localhost:8000/member/data/?name=${name}`)
+  .then(response=> {{
+    Object.assign(memberData, response.data)
+  }})
+  .catch(error=> {
+    console.log(error)
+  })
 }
-// 傳送到子組件
-// const msg= ref('')
-
-// 從子組件接收
-// const updateHandler= (data)=>{
-//   console.log(data)
-// }
-
-
 
 </script>
 

@@ -13,7 +13,7 @@ from .models import Member
 from .serializers import MemberSerializer, CreateMemberSerializer
 from decorators import try_except
 
-# 註冊 register/
+# 註冊 
 @api_view(['POST'])
 @try_except
 def save_member(request):
@@ -23,7 +23,7 @@ def save_member(request):
     # print(request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({"message": f"save member {serializer.data['name']}"}, status= status.HTTP_201_CREATED)
+        return Response({"message": f"{serializer.data['display_name'] if serializer.data['display_name'] else serializer.data['name']}"}, status= status.HTTP_201_CREATED)
     
     else:
         raise ValidationError(serializer.errors)
@@ -71,14 +71,14 @@ def activate_account(request, uidb64, token):
     else:
         return Response({"error": "無效的驗證連結"}, status= status.HTTP_400_BAD_REQUEST)
 
-# 修改會員資料 edit_data/
+# 修改會員資料 
 @api_view(['PUT'])
 @try_except
 def edit_data(request):
+    print(request.data)
+    member= Member.objects.get(name= request.data['name'])
     
-    member= Member.objects.get(name= request.session['name'])
-    
-    serializer= MemberSerializer(member, data= request.data)
+    serializer= MemberSerializer(member, data= request.data, partial= True)
     
     if serializer.is_valid():
         serializer.save()
@@ -91,10 +91,9 @@ def edit_data(request):
 @api_view(['POST'])
 @try_except
 def login(request):
-    member= Member.objects.get(name= request.get('name'))
-    
-    if check_password(request.data.get('password'), member.password):
-        return Response({'message': "OK"})
+    member= Member.objects.get(name= request.data['name'])
+    if request.data['password']== member.password:
+        return Response({'message': str(member)}, status= status.HTTP_200_OK)
     else:
         return Response({'error': '密碼不正確'}, status= status.HTTP_400_BAD_REQUEST)
 
@@ -103,11 +102,11 @@ def login(request):
 def logout():
     pass
 
-# 取得所有會員資料 get_data/
+# 取得所有會員資料 
 @api_view(['GET'])
 @try_except
-def get_data(request):
-    # '''
+def get_all_data(request):
+    '''
     all_data= []
     for member in Member.objects.all().iterator():
         data= {
@@ -139,6 +138,13 @@ def get_data(request):
         }
         all_data.append(data)
     return Response(all_data)
-    # '''
-    # all_data= [MemberSerializer(member).data for member in Member.objects.all().iterator()]
-    # return Response(all_data)
+    '''
+    all_data= [MemberSerializer(member).data for member in Member.objects.all().iterator()]
+    return Response(all_data)
+
+# 取得會員資料 
+@api_view(['GET'])
+@try_except
+def get_data(request):
+    member= Member.objects.get(name= request.GET.get('name'))
+    return Response(MemberSerializer(member).data)
