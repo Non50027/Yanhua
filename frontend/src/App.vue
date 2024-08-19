@@ -1,25 +1,61 @@
 <template>
     <div>
-      <div>
-        <button @click='showForm= !showForm'>{{isLogin? (showForm? (memberData.display_name? memberData.display_name: memberData.name): "返回"): (showForm? "不想戴":"戴上命名牌")}}</button>
-        <login v-if="showForm && !isLogin" @login-success="isMember"></login>
-        <member v-if="!showForm && isLogin" :data='memberData' />
-      </div>
-      <home />
+      <BNavbar toggleable="lg">
+        <BNavbarBrand href="/">
+          <img src="http://localhost:8000/static/image15.png" alt="Logo">
+        </BNavbarBrand>
+
+
+        <BCollapse id="nav-collapse" is-nav>
+          <BNavbarNav>
+            <BNavItem href="/member" @click="test= !test">
+              <router-link to="/member" class="custom-link">
+                {{memberData.display_name? memberData.display_name: memberData.name}}
+              </router-link>
+            </BNavItem>
+            <BNavItem v-for="(items, index) in optionsData.Navigation" :key="index" :href="items.link" >
+              <router-link :to="items.link" class="custom-link">
+                {{items.name}}
+              </router-link>
+            </BNavItem>
+          </BNavbarNav>
+        </BCollapse>
+        <BDropdown   v-if="!isLogin" no-caret class="ms-auto" >
+          <template #button-content>
+            <BButton  class="ms-auto">戴上命名牌</BButton>
+          </template>
+          <login @login-success="isMember"></login>
+        </BDropdown>
+        <BNavbarToggle target="nav-collapse"></BNavbarToggle>
+      </BNavbar>
+        <!-- <member v-if="isLogin" :data='memberData' /> -->
+
+      <router-view />
+      <home v-if='test'/>
     </div>
   
 </template>
 
 <script setup>
-import { ref, reactive, onUpdated } from 'vue'
+import { ref, reactive, onUpdated, onMounted } from 'vue'
 import axios from "axios"
 
-const showForm = ref(false)
+const test= ref(true)
 const isLogin = ref(!!sessionStorage.getItem('name'))
 const memberData= reactive({})
+const optionsData= reactive({})
 
-onUpdated(()=>{
+const getAllData= ()=>{
+  axios.get('http://localhost:8000/options/get')
+  .then(response=> {{
+    Object.assign(optionsData, response.data)
+    console.log('Options:', optionsData)
+  }})
+  .catch(error=> {
+    console.log(error)
+  })
   const name= sessionStorage.getItem('name')
+  if (name=== null){return}
   axios.get(`http://localhost:8000/member/data/?name=${name}`)
   .then(response=> {{
     Object.assign(memberData, response.data)
@@ -27,8 +63,14 @@ onUpdated(()=>{
   .catch(error=> {
     console.log(error)
   })
+}
+onUpdated(()=>{
+  getAllData()
+  
 })
-
+onMounted(()=>{
+  getAllData()
+})
 const isMember= ()=>{
   isLogin.value = !isLogin.value
   const name= sessionStorage.getItem('name')
@@ -44,11 +86,12 @@ const isMember= ()=>{
 </script>
 
 <style scoped>
-.type1 {
-  border: 2px rgb(235, 155, 235) solid;
+.custom-link {
+  text-decoration: none; /* 移除底線 */
+  color: #440000; 
 }
-.type2 {
-  border: 2px rgb(109, 243, 214) solid;
+
+.custom-link:hover {
+  color: #9b6498; /* 可以設置懸停時的顏色 */
 }
 </style>>
-

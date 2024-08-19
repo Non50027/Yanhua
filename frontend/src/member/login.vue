@@ -1,36 +1,34 @@
 <template>
-    <!-- <div v-if="!isLogin">     -->
-    <div >    
-        <h2>{{isRegistered? "創建我的命名牌":"尋找我的命名牌"}}</h2>
-        <form @submit.prevent="submitForm">
+    <div>
+        <BForm @submit.prevent="submitForm" @click.stop class="floating-form p-4">
+            <h3 >{{isRegistered? "創建命名牌":"尋找命名牌"}}</h3>
             <div>
                 <label for="name">帳號：</label>
-                <input type="text" v-model="formData.name" name="name" required />
-                <p v-if="errors.name">{{ errors.name }}</p>
+                <BFormInput type="text" v-model="formData.name" name="name" required />
+                <p v-if="errors.name" class="text-danger">{{ errors.name }}</p>
             </div>
             <div v-if="isRegistered">
                 <label for="email">電子郵件：</label>
-                <input type="email" v-model="formData.email" name="email" required/>
-                <p v-if="errors.email">{{ errors.email }}</p>
+                <BFormInput type="email" v-model="formData.email" name="email" required/>
+                <p v-if="errors.email" class="text-danger">{{ errors.email }}</p>
             </div>
             <div>
                 <label for="password">密碼：</label>
-                <input type="password" v-model="formData.password" name="password" required />
+                <BFormInput type="password" v-model="formData.password" name="password" required />
             </div>
             <div v-if="isRegistered">
                 <label for="rePassword">再次輸入密碼：</label>
-                <input type="password" v-model="formData.rePassword" name="rePassword" required/>
+                <BFormInput type="password" v-model="formData.rePassword" name="rePassword" required/>
             </div>
-            <p v-if="errors.password">{{ errors.password }}</p>
-            <button type="submit" >提交</button>
-        </form>
-        <button @click='isRegistered= !isRegistered'>{{isRegistered ? '已經有了' : '成為小羊'}}</button>
-        {{message}}
+            <p v-if="errors.password" class="text-danger">{{ errors.password }}</p>
+            <BButton type="submit" >提交</BButton>
+            <BButton @click.stop='isRegistered= !isRegistered' variant="link">{{isRegistered ? '已經有命名牌了' : '成為小羊'}}</BButton>
+        </BForm>
     </div>
 </template>
 
 <script setup>
-import { ref, reactive, onUpdated } from 'vue'
+import { ref, reactive } from 'vue'
 import axios from 'axios'
 import cookies from 'vue-cookies'
 // 控制登入&註冊表單切換
@@ -60,6 +58,15 @@ const submitForm = () => {
     errors.email= null;
     errors.password= null;
     let url= 'http://localhost:8000/member/'
+    // 通用判斷
+    if (!/^[A-Za-z0-9_]{8,}$/.test(formData.name)){
+        errors.name= '帳號至少需要 8 位且只能包含大小寫字母數字和底線'
+        return
+    }
+    if (!/^[A-Za-z0-9_]{8,}$/.test(formData.password)){
+        errors.password= '密碼至少需要 8 位且只能包含大小寫字母數字和底線'
+        return
+    }
     // 註冊
     if (isRegistered.value){
         url+= 'register/'
@@ -70,15 +77,6 @@ const submitForm = () => {
     // 登入
     }else{
         url+= 'login/'
-    }
-    // 通用判斷
-    if (!/^[A-Za-z0-9_]{8,}$/.test(formData.name)){
-        errors.name= '帳號至少需要 8 位且只能包含大小寫字母數字和底線'
-        return
-    }
-    if (!/^[A-Za-z0-9_]{8,}$/.test(formData.password)){
-        errors.password= '密碼至少需要 8 位且只能包含大小寫字母數字和底線'
-        return
     }
     // 提交表單
     axios.post(url, formData)
@@ -91,6 +89,16 @@ const submitForm = () => {
         sessionStorage.setItem('name', formData.name)
         // 回應父組件
         emit('login-success')
+        // 寄送驗證信件
+        axios.post('http://localhost:8000/member/verification/', formData)
+        .then(response => {
+            alert(response.data.message);
+            console.log(response.data)
+        })
+        .catch(error => {
+            alert('錯誤')
+            console.log(error.response.data.error)
+        });
     })
     .catch(error => {
         // 檢查回應中的錯誤信息
@@ -99,7 +107,12 @@ const submitForm = () => {
         } if (Object.keys(error.response.data.error)[0]=='email') {
             errors.email = error.response.data.error.email[0];
         } else {
-            errors.password = '發生錯誤';
+            if(error.response.data.error=='密碼不正確'){
+                errors.password = '密碼不正確';
+            }else{
+                errors.password = '錯誤';
+                console.log(error.response.data.error)
+            }
         }
     })
 }
@@ -107,5 +120,22 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+/* 自訂表單內容樣式 */
+.floating-form {
+  width: 300px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+  position: absolute; /* 絕對定位相對於按鈕 */
+  top: -10px; /* 懸浮在按鈕下方 */
+  right: 20px; /* 距離螢幕右邊界 10px */
+  transform: translateY(10px); /* 稍微下移，使其看起來更自然 */
+  z-index: 1000;
+  padding: 20px;
+  border: none;
+}
 
+.text-danger {
+  color: red;
+}
 </style>>
