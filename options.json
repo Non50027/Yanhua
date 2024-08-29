@@ -1,11 +1,11 @@
 {
     "Navigation": [
-        {"name":"關於", "link":"yanhua"},
-        {"name":"近期活動", "link":"go"},
-        {"name":"二創規範", "link":"tto"},
-        {"name":"什麼意思", "link":"huh"},
-        {"name":"官方周邊", "link":"shop"},
-        {"name":"抖內養羊", "link":"done"},
+        {"name":"關於", "link":"/yanhua"},
+        {"name":"近期活動", "link":"/go"},
+        {"name":"二創規範", "link":"/tto"},
+        {"name":"什麼意思", "link":"/huh"},
+        {"name":"官方周邊", "link":"/shop"},
+        {"name":"抖內養羊", "link":"/done"},
         {"name":"棉花糖", "link":"https://marshmallow-qa.com/yh_03_30?utm_medium=url_text&utm_source=promotion"}
     ],
     "personal_data": {

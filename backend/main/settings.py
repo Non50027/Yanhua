@@ -51,6 +51,7 @@ CORS_ALLOWED_ORIGINS = [
 MY_APPS= [
     'member',
     'shop',
+    'order',
     'activity',
     'options',
     'rest_framework',

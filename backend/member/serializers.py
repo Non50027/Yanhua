@@ -1,37 +1,37 @@
 from rest_framework import serializers
 from .models import Member
-from shop.models import Order, OrderItem, Product
+from order.models import Order, Item, Product
 
-class ProductSerializer(serializers.ModelSerializer):
+class GetProduct(serializers.ModelSerializer):
     class Meta:
         model= Product
         fields= ['name', 'price']
-
-class ItemSerializer(serializers.ModelSerializer):
-    product= ProductSerializer(many= True)  # 嵌套的商品序列化器
+        
+class GetItem(serializers.ModelSerializer):
+    product= GetProduct(read_only=True)
 
     class Meta:
-        model= OrderItem
-        fields= ['product', 'count']
+        model= Item
+        fields= ['product', 'count', 'price']
 
-class OrderSerializer(serializers.ModelSerializer):
-    items= ItemSerializer(many= True)  # 嵌套的訂單商品序列化器
+class GetOrder(serializers.ModelSerializer):
+    items= GetItem(read_only=True, many=True)
 
     class Meta:
         model= Order
         fields= ['id', 'status', 'created_at', 'total_amount', 'address', 'tel', 'items']
 
-class MemberSerializer(serializers.ModelSerializer):
-    order= OrderSerializer(many= True)  # 嵌套的訂單序列化器
+class GetMember(serializers.ModelSerializer):
+    order= GetOrder(many= True)  # 嵌套的訂單序列化器
 
     class Meta:
         model= Member
         fields= ['name', 'display_name', 'icon', 'email', 'verification', 'address', 'tel', 'created_at', 'role', 'order']
 
-class CreateMemberSerializer(serializers.ModelSerializer):
+class CreateMember(serializers.ModelSerializer):
 
     class Meta:
         model= Member
-        fields= ['name', 'password', 'display_name', 'email', 'created_at', 'role']
+        fields= ['name', 'password', 'email']
     
     

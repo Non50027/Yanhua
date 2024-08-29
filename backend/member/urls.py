@@ -12,7 +12,7 @@ urlpatterns = [
     path("logout/", views.logout, name= "logout"),
     path("data/", views.get_data, name= "get_data"),
     path("all_data/", views.get_all_data, name= "get_all_data"),
-    path("verification/", views.verification_email, name= "verification_email"),
+    path("verification/<name>", views.verification_email, name= "verification_email"),
     path("verification/<uidb64>/<token>/", views.activate_account, name= "activate_account"),
     
 ]

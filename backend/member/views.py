@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from .models import Member
-from .serializers import MemberSerializer, CreateMemberSerializer
+from .serializers import GetMember, CreateMember
 from decorators import try_except
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
@@ -18,7 +18,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 @try_except
 def save_member(request):
     
-    serializer= CreateMemberSerializer(data= request.data)
+    serializer= CreateMember(data= request.data)
     
     # print(request.data)
     if serializer.is_valid():
@@ -31,10 +31,9 @@ def save_member(request):
 # 發送驗證信
 @api_view(['POST'])
 @try_except
-def verification_email(request):
-    print(request.data['email'])
+def verification_email(request, name):
     # 取得會員資料
-    member= Member.objects.get(name= request.data['name'])
+    member= Member.objects.get(name= name)
     
     token= VerificationEmail()
     # 生成一個專屬身分令牌
@@ -53,7 +52,7 @@ def verification_email(request):
         title,
         message,
         settings.EMAIL_HOST_USER,
-        [request.data['email']],
+        [member.email],
         fail_silently= False,
     )
     return Response({'message': '驗證信已送出...請驗證以使用更多功能'}, status= status.HTTP_200_OK)
@@ -81,7 +80,7 @@ def edit_data(request):
     
     member= Member.objects.get(name= request.data['name'])
     
-    serializer= MemberSerializer(member, data= request.data, partial= True)
+    serializer= GetMember(member, data= request.data, partial= True)
     
     if serializer.is_valid():
         serializer.save()
@@ -95,8 +94,11 @@ def edit_data(request):
 @try_except
 def login(request):
     member= Member.objects.get(name= request.data['name'])
+    
+    serializer= GetMember(member)
+    
     if request.data['password']== member.password:
-        return Response({'message': str(member)}, status= status.HTTP_200_OK)
+        return Response({'message': str(member), 'data': serializer.data}, status= status.HTTP_200_OK)
     else:
         return Response({'error': '密碼不正確'}, status= status.HTTP_400_BAD_REQUEST)
 
@@ -108,7 +110,7 @@ def logout():
 @api_view(['GET'])
 @try_except
 def get_all_data(request):
-    all_data= [MemberSerializer(member).data for member in Member.objects.all().iterator()]
+    all_data= [GetMember(member).data for member in Member.objects.all().iterator()]
     return Response(all_data)
 
 # 取得會員資料 
@@ -116,7 +118,7 @@ def get_all_data(request):
 @try_except
 def get_data(request):
     member= Member.objects.get(name= request.GET.get('name'))
-    return Response(MemberSerializer(member).data)
+    return Response(GetMember(member).data)
 
 class VerificationEmail(PasswordResetTokenGenerator):
     def _make_hash_value(self, member, timestamp):

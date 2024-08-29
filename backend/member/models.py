@@ -19,7 +19,7 @@ class Member(models.Model):
     # 訂單狀態選擇
     class Role(models.TextChoices):
         OWNER= 'owner', '烟花'
-        ADMIN= 'ADMIN', '小幫手'
+        ADMIN= 'admin', '小幫手'
         MEMBER= 'member', '小羊'
     
     name= models.CharField(max_length= 50, unique= True, error_messages= {'unique': '已有重複帳號...禁止冒名頂替'})
