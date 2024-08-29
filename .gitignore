@@ -25,6 +25,4 @@ frontend/.vscode/*
 *.sln
 *.sw?
 
-run.bat
-run.ps1
 .env

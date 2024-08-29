@@ -1,18 +1,25 @@
-import os
+import os, re
 from django.db import models
 from django.core.exceptions import ValidationError
-import re
+from django.conf import settings
 
 def icon_name(instance, file_name):
         file_name= f"{instance.name}.{file_name.split('.')[-1]}"
-        return os.path.join('member/', file_name)
+        file_path = os.path.join('member/', file_name)
+
+        # 檢查檔案是否已經存在，如果存在則刪除
+        full_path = os.path.join(settings.MEDIA_ROOT, file_path)
+        if os.path.exists(full_path):
+            os.remove(full_path)
+
+        return file_path
     
 # 會員
 class Member(models.Model):
     # 訂單狀態選擇
     class Role(models.TextChoices):
         OWNER= 'owner', '烟花'
-        ADMIN= 'ADMIN', '小幫手'
+        ADMIN= 'admin', '小幫手'
         MEMBER= 'member', '小羊'
     
     name= models.CharField(max_length= 50, unique= True, error_messages= {'unique': '已有重複帳號...禁止冒名頂替'})

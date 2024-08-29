@@ -1,54 +1,52 @@
 <template>
     <div>
-      <div>
-        <button @click='showForm= !showForm'>{{isLogin? (showForm? (memberData.display_name? memberData.display_name: memberData.name): "返回"): (showForm? "不想戴":"戴上命名牌")}}</button>
-        <login v-if="showForm && !isLogin" @login-success="isMember"></login>
-        <member v-if="!showForm && isLogin" :data='memberData' />
-      </div>
-      <home />
+      <BRow align-h="center">
+        <BCol md="9">
+          <navbar :data="optionsData" :memberName="memberData.display_name ? memberData.display_name : memberData.name" />
+        </BCol>
+        <BCol md="12">
+          <home />
+        </BCol>
+      </BRow>
     </div>
   
 </template>
 
 <script setup>
-import { ref, reactive, onUpdated } from 'vue'
+import { ref, reactive, onBeforeMount  } from 'vue'
 import axios from "axios"
+import navbar from './control/navbar.vue'
+import { getMemberData } from './services/getData';
 
-const showForm = ref(false)
-const isLogin = ref(!!sessionStorage.getItem('name'))
 const memberData= reactive({})
-
-onUpdated(()=>{
-  const name= sessionStorage.getItem('name')
-  axios.get(`http://localhost:8000/member/data/?name=${name}`)
-  .then(response=> {{
-    Object.assign(memberData, response.data)
-  }})
-  .catch(error=> {
+const optionsData= reactive({})
+onBeforeMount (async ()=>{
+  if (sessionStorage.getItem('name')){Object.assign (memberData, await getMemberData(sessionStorage.getItem('name')))}
+});
+// 取得設定檔
+(function(){
+  axios.get(`${import.meta.env.VITE_BACKEND}/options/get`)
+  .then(response => {
+    Object.assign(optionsData, response.data)
+  })
+  .catch(error => {
     console.log(error)
   })
-})
-
-const isMember= ()=>{
-  isLogin.value = !isLogin.value
-  const name= sessionStorage.getItem('name')
-  axios.get(`http://localhost:8000/member/data/?name=${name}`)
-  .then(response=> {{
-    Object.assign(memberData, response.data)
-  }})
-  .catch(error=> {
-    console.log(error)
-  })
-}
+})();
 
 </script>
 
-<style scoped>
-.type1 {
-  border: 2px rgb(235, 155, 235) solid;
+<style>
+.levitated-windows {
+  position: fixed;
+  border-radius: 15px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  outline: none; /* 確保元素沒有默認的focus樣式 */
 }
-.type2 {
-  border: 2px rgb(109, 243, 214) solid;
-}
-</style>>
-
+</style>
