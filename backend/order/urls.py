@@ -11,6 +11,5 @@ urlpatterns= [
     path('get/', views.get, name= "get"),
     path('edit/', views.edit, name= "edit"),
     path('delete/', views.delete, name= "delete"),
-    path('email/<name>', views.email, name= "email"),
     
 ]+ img

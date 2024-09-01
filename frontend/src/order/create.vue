@@ -72,34 +72,25 @@ const submitForm = () => {
         alert('請先驗證信箱');
         return;
     }
-    // 宣告表單
-    let tempForm= new FormData();
-    // 宣告商品名列表
-    let items_name=[]
-    data.forEach((item)=>{
-        items_name.push(item.name)
-    })
-    // 宣告商品數量列表
-    let items_count=[]
-    data.forEach((item)=>{
-        items_count.push(item.num)
-    })
-    
-    tempForm.append('member', memberData.name);
-    tempForm.append('addressee', tempFormData.name);
-    tempForm.append('tel', tempFormData.tel);
-    tempForm.append('address', tempFormData.address);
-    tempForm.append('total_amount', total.value);
-    tempForm.append('items_name', items_name);
-    tempForm.append('items_count', items_count);
-
+    // 構建要提交的資料
+    const orderData = {
+        member: memberData,
+        addressee: tempFormData.name,
+        tel: tempFormData.tel,
+        address: tempFormData.address,
+        total_amount: total.value,
+        items: data.map(item => ({
+            product: item,
+            count: item.num
+        }))
+    };
     // 提交表單
-    axios.post(`${import.meta.env.VITE_BACKEND}/order/add/`, tempForm)
+    axios.post(`${import.meta.env.VITE_BACKEND}/order/add/`, orderData)
     .then(response => {
         location.reload()
         alert(response.data['message'])
-        console.log('成功提交：', response.data['data'])
         location.href = '/shop'
+        console.log('成功提交：', response.data['data'])
     })
     .catch(error => {
         console.log(error.response.data.error)

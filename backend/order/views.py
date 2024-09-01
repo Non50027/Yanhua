@@ -17,32 +17,12 @@ from .models import Order
 @try_except
 def add(request):
     
-    # products = {name: Product.objects.get(name=name) for name in request.data['items_name'].split(',')}
-    products = [{'name': Product.objects.get(name=name), 'count': int(count)} for name, count in zip(request.data['items_name'].split(','), request.data['items_count'].split(','))]
-
-    data={
-        'member': Member.objects.get(name= request.data['member']).pk,
-        'addressee': request.data['addressee'],
-        'tel': request.data['tel'],
-        'address': request.data['address'],
-        'total_amount': request.data['total_amount'],
-        'items': [{
-            # 'product': {
-            #     'name': _['name'].name,
-            #     'price': _['name'].price,
-            # },
-            'product': _['name'].pk,
-            'count': _['count'],
-            'price': _['name'].price * _['count']
-        } for _ in products]
-    }
+    serializer= CreateOrder(data= request.data)
     
-    serializer= CreateOrder(data= data, partial= True)
-    print(serializer)
     if serializer.is_valid():
-        serializer.save()
-        print(Order.objects.get(id= serializer.data['id']))
-        return Response({"message": str(Order.objects.get(id= serializer.data['id'])), 'data': serializer.data}, status= status.HTTP_201_CREATED)
+        order= serializer.save()
+        email(order)
+        return Response({"message": str(order), 'data': serializer.data}, status= status.HTTP_201_CREATED)
     
     else:
         raise ValidationError(serializer.errors)
@@ -80,23 +60,19 @@ def delete(request):
     return Response({'message': f"delete order OK"})
 
 # 發送確認信
-@api_view(['POST'])
 @try_except
-def email(request, name):
-    # 取得會員資料
-    member= Member.objects.get(name= name)
-    order= Order.objects.get(name= name)
+def email(order):
     
-    title= '成為合格認證的小羊'
-    message= render_to_string('email.html', {
-        'user': member,
-        'order': order,
+    order_detail= GetOrder(order).data
+    
+    title= '穴穴尼把羊帶回家'
+    message= render_to_string('orderEmail.html', {
+        'data': order_detail,
     })
     send_mail(
         title,
         message,
         settings.EMAIL_HOST_USER,
-        [member.email],
+        order_detail['member']['email'],
         fail_silently= False,
     )
-    return Response({'message': '驗證信已送出...請驗證以使用更多功能'}, status= status.HTTP_200_OK)

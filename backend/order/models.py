@@ -9,11 +9,11 @@ class Order(models.Model):
     
     # 訂單狀態選擇
     class OrderStatus(models.TextChoices):
-        PENDING= 'pending', '等待確認'
-        PROCESSED= 'processed', '等待出貨'
-        SHIPPED= 'shipped', '已出貨'
-        DELIVERED= 'delivered', '已交付'
-        CANCELED= 'canceled', '取消'
+        PENDING= '等待確認'
+        PROCESSED= '等待出貨'
+        SHIPPED= '已出貨'
+        DELIVERED= '已交付'
+        CANCELED= '取消'
     
     id= models.CharField(max_length= 20, unique=True, blank=True, primary_key= True)
     status= models.CharField(max_length= 15, choices= OrderStatus.choices, default= OrderStatus.PENDING)    # 訂單狀態

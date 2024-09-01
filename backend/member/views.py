@@ -44,7 +44,7 @@ def verification_email(request, name):
     verification_link= f'http://localhost:5173/member/{member.name}/{uid}/{token}/'
     
     title= '成為合格認證的小羊'
-    message= render_to_string('email.html', {
+    message= render_to_string('verificationEmail.html', {
         'user': member,
         'verification_link': verification_link,
     })
