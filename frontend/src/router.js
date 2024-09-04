@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import member from './member/member.vue'
 import shop from './shop/shop.vue'
-import cart from './shop/cart.vue'
-import add from './shop/add/add.vue'
+import detailed from './shop/detailed.vue'
 import create from './order/create.vue'
 import get from './order/get.vue'
 import go from './activity/go.vue'
@@ -20,30 +19,33 @@ const routes = [
     },
     { 
         path: '/shop',
-        component: shop,
         children:[
             { 
-                path: 'add',
-                component: add,
+                path: 'show',
+                name: 'showAllProducts',
+                component: shop,
             },
             { 
-                path: 'cart',
-                component: cart,
-                params:{}
-            }
+                path: 'detailed',
+                name: 'detailedPage',
+                component: detailed,
+            },
         ]
     },
     { 
         path: '/order',
-        name: 'order',
-        component: create,
-        // children:[
-        //     { 
-        //         path: 'get/:id',
-        //         component: get,
-        //         props: true
-        //     }
-        // ]
+        children:[
+            { 
+                path: 'get',
+                name: 'orderGet',
+                component: get,
+            },
+            { 
+                path: 'create',
+                name: 'orderCreate',
+                component: create,
+            }
+        ]
     },
     { 
         path: '/go',

@@ -44,16 +44,19 @@ def verification_email(request, name):
     verification_link= f'http://localhost:5173/member/{member.name}/{uid}/{token}/'
     
     title= '成為合格認證的小羊'
-    message= render_to_string('verificationEmail.html', {
-        'user': member,
-        'verification_link': verification_link,
-    })
+    message= render_to_string(
+            template_name= 'verificationEmail.html', 
+            context= {
+            'user': member,
+            'verification_link': verification_link,
+        })
     send_mail(
         title,
-        message,
+        '',
         settings.EMAIL_HOST_USER,
         [member.email],
         fail_silently= False,
+        html_message= message,
     )
     return Response({'message': '驗證信已送出...請驗證以使用更多功能'}, status= status.HTTP_200_OK)
 

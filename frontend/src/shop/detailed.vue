@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <BContainer>
         <BRow>
             <BCol>
                 <img :src='data.icon' class="icon img-thumbnail">
@@ -27,15 +27,23 @@
                 <label >開始販售日期<br>{{ data.date }}</label><br>
             </BCol>
         </BRow>
-    </div>
+    </BContainer>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
-defineProps(['data'])
+const props= defineProps({
+    data: {
+        type: Object,
+        default: ()=>{
+            let route= useRoute()
+            return JSON.parse(decodeURIComponent(route.query.data))
+        }
+    }
+})
 // 載入前執行
 onBeforeMount(()=>{
-
 });
 // 載入後執行
 onMounted(()=>{

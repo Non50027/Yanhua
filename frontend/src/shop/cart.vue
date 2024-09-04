@@ -17,18 +17,17 @@
             </BRow>
             <BRow align-v="end" >
                 <BCol md="8"></BCol>
-                <BCol><BLink :to="{name: 'order', query: {list: JSON.stringify(rawItems())}}" ><BButton size="sm">確定</BButton></BLink></BCol>
+                <BCol><BLink :to="{name: 'orderCreate', query: {list: encodeURIComponent(JSON.stringify(rawItems()))}}" ><BButton size="sm" @click.stop>確定</BButton></BLink></BCol>
                 <BCol class="total-price">${{ total }}</BCol>
             </BRow>
         </BContainer>
     </div>
-
 </template>
 
 <script setup>
 import { toRaw } from 'vue';
 import create from '../order/create.vue'
-import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount, nextTick } from 'vue'
+import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
 // 接收商品資料
 const props= defineProps({
     items:{type: Array}

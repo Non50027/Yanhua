@@ -7,9 +7,9 @@
         <BCollapse id="nav-collapse" is-nav v-model="onSwitch">
             <BNavbarNav>
                 <BNavItem v-if="isLogin" to="/member" @click="onSwitch= !onSwitch">
-                    {{ memberName }}
+                    {{ memberData.display_name ? memberData.display_name : memberData.name }}
                 </BNavItem>
-                <BNavItem v-for="(item, index) in data.Navigation" :key="index" :[isHref(item.link)]="item.link" @click="onSwitch= !onSwitch">
+                <BNavItem v-for="(item, index) in optionsData.Navigation" :key="index" :[isHref(item.link)]="item.link" @click="onSwitch= !onSwitch">
                     {{item.name}}
                 </BNavItem>
             </BNavbarNav>
@@ -20,7 +20,7 @@
         <login v-if="onLogin" class="levitated-windows" ref="loginRef"/>
         <BNavbarToggle target="nav-collapse" />
     </BNavbar>
-    <div class="router-content"><router-view /></div>
+    <div class="router-content"><router-view :optionsData="optionsData" :memberData="memberData"/></div>
 </template>
 
 <script setup>
@@ -36,8 +36,8 @@ const onLogin= ref(false)
 const onSwitch= ref(false)
 // 父組件傳來的資料
 defineProps({
-    data: Object,
-    memberName: String,
+    optionsData: Object,
+    memberData: Object,
 })
 // 檢查登入狀態
 const isLogin = ref(!!sessionStorage.getItem('name'))

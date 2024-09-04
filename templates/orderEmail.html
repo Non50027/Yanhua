@@ -1,4 +1,10 @@
-<p>{{ ?data.member.display_name:data.member.display_name:data.member.name }}</p>
+<p> 
+    {% if data.member.display_name %}
+        {{ data.member.display_name }}
+    {% else %}
+        {{ data.member.name }}
+    {% endif %}
+</p>
 <p>感謝把羊羊帶回家</p>
 <p>領羊號碼：{{ data.id }}</p>
 <p>可以用它在羊星球查詢更多資訊喔</p>

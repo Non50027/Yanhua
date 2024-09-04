@@ -39,7 +39,7 @@ def edit(request):
     
     return Response({'message': f"edit OK", 'data': serializer.data}, status= status.HTTP_200_OK)
 
-# 商除商品
+# 刪除商品
 @api_view(['DELETE'])
 @try_except
 def delete(request):

@@ -81,4 +81,4 @@ class GetOrder(serializers.ModelSerializer):
     
     class Meta:
         model= Order
-        fields= ['id', 'status', 'created_at', 'total_amount', 'address', 'tel', 'items', 'member']
+        fields= ['id', 'status', 'created_at', 'total_amount', 'addressee', 'address', 'tel', 'items', 'member']

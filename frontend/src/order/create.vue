@@ -25,14 +25,13 @@
 
 <script setup>
 import axios from 'axios'
-import { toRaw } from 'vue';
 import login from '../member/login.vue'
 import { getMemberData } from '../services/getData';
 import { useRoute } from 'vue-router';
 import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
 // 接收URL參數
 const route= useRoute()
-const data= reactive(route.query.list ? JSON.parse(route.query.list) : [])
+const data= reactive(decodeURIComponent(route.query.list) ? JSON.parse(decodeURIComponent(route.query.list)) : [])
 // 判斷登入
 const isLogin= ref(sessionStorage.getItem('name'))
 // 會員資料

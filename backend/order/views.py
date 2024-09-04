@@ -65,14 +65,16 @@ def email(order):
     
     order_detail= GetOrder(order).data
     
-    title= '穴穴尼把羊帶回家'
-    message= render_to_string('orderEmail.html', {
-        'data': order_detail,
-    })
+    message= render_to_string(
+            template_name= 'orderEmail.html', 
+            context= {
+            'data': order_detail,
+        })
     send_mail(
-        title,
-        message,
+        '穴穴尼把羊帶回家',
+        '',
         settings.EMAIL_HOST_USER,
-        order_detail['member']['email'],
+        [order_detail['member']['email']],
         fail_silently= False,
+        html_message= message
     )

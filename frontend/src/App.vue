@@ -2,7 +2,7 @@
     <div>
       <BRow align-h="center">
         <BCol md="9">
-          <navbar :data="optionsData" :memberName="memberData.display_name ? memberData.display_name : memberData.name" />
+          <navbar :optionsData="optionsData" :memberData="memberData" />
         </BCol>
         <BCol md="12">
           <home />
@@ -21,7 +21,9 @@ import { getMemberData } from './services/getData';
 const memberData= reactive({})
 const optionsData= reactive({})
 onBeforeMount (async ()=>{
-  if (sessionStorage.getItem('name')){Object.assign (memberData, await getMemberData(sessionStorage.getItem('name')))}
+  if (sessionStorage.getItem('name')){
+    Object.assign (memberData, await getMemberData(sessionStorage.getItem('name')))
+  }
 });
 // 取得設定檔
 (function(){
