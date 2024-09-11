@@ -1,11 +1,8 @@
 <template>
-    <BForm @submit.prevent="submitForm" >
-        <img :src='data.icon' class="icon img-thumbnail" :alt="data.display_name? data.display_name: data.name">
-        <div class="input-group mt-3">
-            <input class="form-control" type="file" @change="onFileChange">
-            <BButton pill type="submit" :disabled="!selectedFile.file">更新資料</BButton>
-        </div>
-    </BForm>
+    <b-input-group prepend="說明文字" class="input-group mt-3">
+        <BFormInput class="form-control" v-model="data.description" />
+        <input class="form-control" type="file" @change="onFileChange">
+    </b-input-group>
 </template>
 
 <script setup>

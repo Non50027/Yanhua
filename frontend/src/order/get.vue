@@ -3,34 +3,34 @@
         <BRow>
             <BCol sm="12" md="6">
                 <b-input-group prepend="編號" class="mb-3">
-                    <BFormInput v-model="orderData.id" disabled></BFormInput>
+                    <BFormInput v-model="orderData.id" disabled />
                 </b-input-group>
             </BCol>
             <BCol sm="7" md="6">
                 <b-input-group prepend="日期" class="mb-3">
-                    <BFormInput v-model="orderData.created_at" disabled></BFormInput>
+                    <BFormInput v-model="orderData.created_at" disabled />
                 </b-input-group>
             </BCol>
             <BCol sm="5" md="4">
                 <b-input-group prepend="狀態" class="mb-3">
-                    <BFormInput v-model="orderData.status" disabled></BFormInput>
+                    <BFormInput v-model="orderData.status" disabled />
                 </b-input-group>
             </BCol>
             <BCol sm="7" md="4">
                 <b-input-group prepend="收件人" class="mb-3">
-                    <BFormInput v-model="orderData.addressee" disabled></BFormInput>
+                    <BFormInput v-model="orderData.addressee" disabled />
                 </b-input-group>
             </BCol>
             <BCol sm="5" md="4">
                 <b-input-group prepend="金額" class="mb-3">
-                    <BFormInput v-model="orderData.total_amount" disabled></BFormInput>
+                    <BFormInput v-model="orderData.total_amount" disabled />
                 </b-input-group>
             </BCol>
             <b-input-group prepend="地址" class="mb-3">
-                <BFormInput v-model="orderData.address" disabled></BFormInput>
+                <BFormInput v-model="orderData.address" disabled />
             </b-input-group>
             <b-input-group prepend="電話" class="mb-3">
-                <BFormInput v-model="orderData.tel" disabled></BFormInput>
+                <BFormInput v-model="orderData.tel" disabled />
             </b-input-group>
         </BRow>
         <BTable bordered striped hover :items="orderItemsTable" ></BTable>

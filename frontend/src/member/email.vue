@@ -7,6 +7,7 @@
             class="form-control" 
             v-model="tempData.value" 
             :state="formatEmailState(tempData)"
+            :placeholder="data.email"
             :disabled="tempData.show"/>
             <b-input-group-text><strong :class="data.verification? 'text-success': 'text-danger'">{{ data.verification? '已驗證': '未驗證' }}</strong></b-input-group-text>
             <b-form-invalid-feedback >
@@ -20,44 +21,38 @@
 
 <script setup>
 import axios from "axios"
-import { ref, reactive, onBeforeMount } from 'vue'
-import { getMemberData } from "../services/getData";
+import { reactive, onBeforeMount } from 'vue'
 import { verificationEmail } from "../services/verificationEmail"
+// 傳入的資料
+defineProps(['data'])
+// 用來儲存表單內容
 const tempData = reactive({
     value: '', 
-    show:true,
+    show:true, // 控制按鈕的狀態
     verification: false
-});
-const data= reactive({})
-onBeforeMount(async()=>{
-    Object.assign(data, await getMemberData(sessionStorage.getItem('name')))
-    tempData.value= data.email
-    tempData.verification = data.verification
 });
  // 判斷 email 格式
 const formatEmailState= (email)=>{
     return email==''? null: (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?  true: false)
 };
+// 提交表單
 const submitForm = () => {
+    // 重製按鈕顯示
     tempData.show= true
-    let temp= false
+    // 未修改就直接跳出
+    if (!tempData.value){return}
 
     const tempForm = new FormData();
     
     tempForm.append('name', sessionStorage.getItem('name'));
     tempForm.append('email', tempData.value|| '')
-    
-    if(tempData.value!= data.email){
-        tempForm.append('verification', false)
-        temp= true
-    }
+    tempForm.append('verification', false)
+
     axios.put(`${import.meta.env.VITE_BACKEND}/member/edit_data/`, tempForm)
     .then(response => {
         alert(response.data.message);
-        if(temp){
-            verificationEmail(data.name)
-            temp= false
-        }
+        // 寄送驗證信
+        verificationEmail(data.name)
         console.log('Response:', response.data)
         location.reload()
     })

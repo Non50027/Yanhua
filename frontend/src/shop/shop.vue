@@ -5,8 +5,9 @@
             <cart v-if="isShopCart" class="levitated-windows shopping-cart" :items="shopCartItems" ref="windowsRef" />
         </div>
         <div>        
-            <BButton pill class="mb-3" v-if="(memberData.name && (memberData.role != 'member'))" @click="switchShow= !switchShow">{{switchShow?'新商品':'取消'}}</BButton>
-            <add v-if="!switchShow" />
+            <BLink to="add">
+                <BButton pill class="mb-3" v-if="(memberData.name && (memberData.role != 'member'))" @click="switchShow= !switchShow">{{switchShow?'新商品':'取消'}}</BButton>
+            </BLink>
         </div>
         <b-input-group prepend="查詢訂單" class="mb-3">
             <BFormInput v-model="orderId"></BFormInput>
@@ -15,8 +16,8 @@
         <BRow v-if="switchShow" >
             <BCol v-for="(item, index) in shopData" :key="index" cols="12" md="6" xl="4">
                 <BCard no-body class="mb-5 my-card" :class="onWindows" tag="article" border-variant="success" @click.stop="showDetailed(item)">
-                    <BCardImg :src="item.icon" :alt="item.name"/>
-                    <BCardBody>
+                    <BCardImg class="h-50" :src="item.icon" :alt="item.name"/>
+                    <BCardBody class="h-25">
                         <BCardTitle class="title">{{ item.name }}</BCardTitle>
                         <BCardText class="context">{{ item.introduction }}</BCardText>
                         <BCardText class="context price">{{ `$ ${item.price}` }}</BCardText>
@@ -30,6 +31,16 @@
                             <BCol><BButton pill @click.stop="addShopCartItems(item)">加購物車</BButton></BCol>
                         </BRow>
                     </BCardBody>
+                    <template v-if="(memberData.name && (memberData.role != 'member'))" v-slot:footer>
+                        <BRow>
+                            <BCol>
+                                <BLink :to="{name: 'editProducts', query:{detailedData: encodeURIComponent(JSON.stringify(rawDetailedData(item)))}}">
+                                    <BButton pill @click.stop>編輯</BButton>
+                                </BLink>
+                            </BCol>
+                            <BCol><BButton pill @click.stop>刪除</BButton></BCol>
+                        </BRow>
+                    </template>
                 </BCard>
             </BCol>
         </BRow>
@@ -158,7 +169,7 @@ const addShopCartItems= (item)=>{
 }
 /* 小螢幕時的卡片尺寸 */
 .small-card {
-    width: 400px;
+    width: 360px;
 }
 
 /* 中等螢幕時的卡片尺寸 */

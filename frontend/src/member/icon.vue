@@ -10,21 +10,20 @@
 
 <script setup>
 import axios from "axios"
-import { getMemberData } from "../services/getData";
-import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
-const data= reactive({})
-onBeforeMount(async ()=>{
-    Object.assign(data, await getMemberData(sessionStorage.getItem('name')))
-});
-// 上傳圖片
+import { reactive } from 'vue'
+// 傳入的資料
+defineProps(['data'])
+// 用來儲存上傳圖片
 const selectedFile = reactive({
     file: null,
     name: null,
 })
+// 上傳的檔案存入 selectedFile
 const onFileChange = (event) => {
     selectedFile.file = event.target.files[0]
     selectedFile.name = event.target.files[0].name
 }
+// 提交表單
 const submitForm= ()=>{
 
     const tempForm= new FormData()

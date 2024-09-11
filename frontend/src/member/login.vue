@@ -110,7 +110,7 @@ const submitForm = () => {
     axios.post(url, formData)
     .then(response => {
         console.log('成功提交：', response.data)
-        // 設置 session 為小羊名子
+        // 設置 session
         sessionStorage.setItem('name', response.data.data.name)
         console.log('name', sessionStorage.getItem('name'))
         alert(`歡迎 ${response.data.message}`)

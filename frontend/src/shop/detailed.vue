@@ -27,6 +27,7 @@
                 <label >開始販售日期<br>{{ data.date }}</label><br>
             </BCol>
         </BRow>
+        {{ data.photos }} 
     </BContainer>
 </template>
 
@@ -44,6 +45,7 @@ const props= defineProps({
 })
 // 載入前執行
 onBeforeMount(()=>{
+    console.log(props.data)
 });
 // 載入後執行
 onMounted(()=>{

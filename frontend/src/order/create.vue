@@ -29,9 +29,6 @@ import login from '../member/login.vue'
 import { getMemberData } from '../services/getData';
 import { useRoute } from 'vue-router';
 import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
-// 接收URL參數
-const route= useRoute()
-const data= reactive(decodeURIComponent(route.query.list) ? JSON.parse(decodeURIComponent(route.query.list)) : [])
 // 判斷登入
 const isLogin= ref(sessionStorage.getItem('name'))
 // 會員資料
@@ -42,6 +39,12 @@ const tempFormData= reactive({})
 const table= reactive([])
 // 載入前執行
 onBeforeMount(async()=>{
+    const props= defineProps({
+        data:{
+            type: Array,
+            default: []
+        }
+    })
     // 響應式表單資料
     if (isLogin){
         Object.assign(memberData, await getMemberData(sessionStorage.getItem('name')))

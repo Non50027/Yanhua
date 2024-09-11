@@ -1,12 +1,11 @@
 <template>
     <div>
         <BForm @submit.prevent="submitForm">
-            <BRow>
+            <BRow class="mb-3">
                 <BCol>
                     <img :src='iconUrl' class="icon img-thumbnail">
                     <label>封面</label>
                     <input class="form-control" type="file" @change="onFileChange">
-                    <b-form-file v-model="data.icon" class="mt-3" plain></b-form-file>
                 </BCol>
                 <BCol>
                     <div>
@@ -23,27 +22,31 @@
                     </div>
                 </BCol>
             </BRow>
-            <div>
+            <BRow class="mb-3">
                 <label >商品詳細</label>
                 <BFormTextarea v-model="data.description" rows="5" max-rows="10"></BFormTextarea>
-            </div>
-            <BRow>
+            </BRow>
+            <BRow class="mb-3">
                 <BCol>
                     <label >庫存數量</label>
                     <BFormInput type="number" v-model="data.stock" required />
                 </BCol>
                 <BCol>
-                    <label >開始販售日期</label><br>
-                    <input type="date" v-model="data.date" />
+                    <label >開始販售日期</label>
+                    <BFormInput type="date" v-model="data.date" />
                 </BCol>
             </BRow>
+            <label >商品美照</label>
+            <photo />
             <BButton pill type="submit">提交</BButton>
         </BForm>
     </div>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 import { ref, reactive, onUpdated, onMounted, onBeforeMount } from 'vue'
+import photo from './photo.vue'
 import axios from 'axios'
 const isToday= ref(true)
 const iconUrl= `${import.meta.env.VITE_BACKEND}/static/product_photo/default_icon.png`
@@ -61,7 +64,10 @@ const onFileChange = (event) => {
 }
 // 載入前執行
 onBeforeMount(()=>{
-
+    let route= useRoute() 
+    if (route.query.detailedData!=undefined){
+        Object.assign(data, JSON.parse(decodeURIComponent(route.query.detailedData)))
+    }
 })
 // 載入後執行
 onMounted(()=>{
@@ -73,24 +79,17 @@ onUpdated(()=>{
 })
 // 表單提交處理函數
 const submitForm = () => {
-    let tempForm= new FormData();
-    
-    if(data.icon){
-        tempForm.append('icon', data.icon);
-    }
-    
-    data.forEach((item) => {
-        tempForm.append(item.DBkey, item.value);
-    });
+
     // 提交表單
-    axios.post(`${import.meta.env.VITE_BACKEND}/shop/add/`, tempForm, {
+    axios.post(`${import.meta.env.VITE_BACKEND}/shop/add/`, data, {
         headers: {
         'Content-Type': 'multipart/form-data',
         },
     })
     .then(response => {
-        location.reload()
         console.log('成功提交：', response.data)
+
+        location.href= '/shop/show'
     })
     .catch(error => {
         console.log(error.response.data.error)

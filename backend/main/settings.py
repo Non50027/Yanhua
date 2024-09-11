@@ -28,7 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 load_env(os.path.join(BASE_DIR, '.env'))
 
-MEDIA_URL= 'http://localhost:8000/static/'
+# MEDIA_URL= 'http://localhost:8000/static/'
+# MEDIA_URL= 'http://61.63.220.46:8000/static/'
+MEDIA_URL= 'http://api.yanhua.com.tw/static/'
 
 MEDIA_ROOT= os.path.join(BASE_DIR, '/YanHua/static/')
 
@@ -41,10 +43,17 @@ SECRET_KEY = 'django-insecure-n(0)2mf0s-h^6w4h&+eewipp$ac0+ktk)^88tp3$7mehic6vp9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'yanhua.com.tw',
+    'api.yanhua.com.tw',
+    'localhost',
+    '61.63.220.46'
+]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vue 預設的端口是 3000
+    "http://localhost:5174",
+    "http://yanhua.com.tw",
+    # "https://yanhua.com.tw",
 ]
 # Application definition
 
@@ -56,6 +65,7 @@ MY_APPS= [
     'options',
     'rest_framework',
     'corsheaders',
+    'django_extensions',
 ]
 
 INSTALLED_APPS = MY_APPS+ [

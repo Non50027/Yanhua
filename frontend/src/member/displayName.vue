@@ -2,7 +2,7 @@
     <BForm class="mt-3" @submit.prevent="submitForm">
         <div class="input-group">
             <span class="input-group-text">暱稱</span>
-            <BFormInput type="text" class="form-control" v-model="tempData.value" :disabled="tempData.show" />
+            <BFormInput type="text" class="form-control" v-model="tempData.value" :disabled="tempData.show" :placeholder="data"/>
             <BButton v-if="tempData.show" @click="tempData.show= !tempData.show" >修改</BButton>
             <BButton v-if="!tempData.show" type="submit" >確定</BButton>
         </div>
@@ -11,20 +11,21 @@
 
 <script setup>
 import axios from "axios"
-import { reactive, onBeforeMount } from 'vue'
-import { getMemberData } from "../services/getData";
+import { ref, reactive, onMounted } from 'vue'
+
+const props= defineProps(['data'])
 const tempData = reactive({
     value: '', 
     show:true
 });
-const data= reactive({})
-onBeforeMount(async ()=>{
-    Object.assign(data, await getMemberData(sessionStorage.getItem('name')))
-    tempData.value= data.display_name
+onMounted(()=>{
+
 });
 const submitForm = () => {
+    // 重製按鈕顯示
     tempData.show= true
-    
+    // 未修改就直接跳出
+    if (!tempData.value){return}
     const tempForm = new FormData();
     
     tempForm.append('name', sessionStorage.getItem('name'));
@@ -34,7 +35,7 @@ const submitForm = () => {
     .then(response => {
         alert(response.data.message);
         console.log('Response:', response.data)
-        // location.reload()
+        location.reload()
     })
     .catch(error => {
         // 處理錯誤

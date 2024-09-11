@@ -1,7 +1,7 @@
 <template>
     <BNavbar fixed="top" toggleable="lg" class="my-navbar">
         <BNavbarBrand href="/">
-            <img src="http://localhost:8000/static/image15.png" alt="Logo">
+            <img class="logo" :src=logoImg alt="Logo">
         </BNavbarBrand>
         
         <BCollapse id="nav-collapse" is-nav v-model="onSwitch">
@@ -26,13 +26,16 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 const loginRef= ref(null)
+const logoImg= `${import.meta.env.VITE_BACKEND}/static/image15.png`
 // const isLogin= ref(false)
 const handleClickOutside = (event) => {
     if (loginRef.value && !loginRef.value.$el.contains(event.target)) {
         onLogin.value = false
     }
 };
+// 控制登入表單的顯示
 const onLogin= ref(false)
+// 切換選單的收起
 const onSwitch= ref(false)
 // 父組件傳來的資料
 defineProps({
@@ -64,6 +67,9 @@ onBeforeUnmount(() => {
     background: #fff4fe;
 }
 .router-content {
-  padding-top: 220px; /* 根據導航欄的高度調整 */
+  padding-top: 150px; /* 根據導航欄的高度調整 */
+}
+.logo {
+    width: 172px;
 }
 </style>
