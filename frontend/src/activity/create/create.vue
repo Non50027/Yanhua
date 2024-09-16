@@ -9,34 +9,34 @@
                 </BCol>
                 <BCol>
                     <div>
-                        <label >商品名稱</label>
-                        <BFormInput type="text" v-model="data.name" required />
+                        <label >活動名稱</label>
+                        <BFormInput type="text" v-model="data.title" required />
                     </div>
                     <div>
-                        <label >商品簡介</label>
-                        <BFormTextarea v-model="data.introduction" rows="3" max-rows="6"></BFormTextarea>
+                        <label >活動地點</label>
+                        <BFormInput type="text" v-model="data.address" required />
                     </div>
                     <div>
-                        <label >價格</label>
-                        <BFormInput type="number" v-model="data.price" required />
+                        <label >活動網址</label>
+                        <BFormInput type="text" v-model="data.url" required />
                     </div>
                 </BCol>
             </BRow>
             <BRow class="mb-3">
-                <label >商品詳細</label>
+                <label >活動詳細</label>
                 <BFormTextarea v-model="data.description" rows="5" max-rows="10"></BFormTextarea>
             </BRow>
             <BRow class="mb-3">
                 <BCol>
-                    <label >庫存數量</label>
-                    <BFormInput type="number" v-model="data.stock" required />
+                    <label >活動開始日期</label>
+                    <BFormInput type="date" v-model="data.start_date" />
                 </BCol>
                 <BCol>
-                    <label >開始販售日期</label>
-                    <BFormInput type="date" v-model="data.date" />
+                    <label >活動結束日期</label>
+                    <BFormInput type="date" v-model="data.stop_date" />
                 </BCol>
             </BRow>
-            <label >商品美照</label>
+            <label >活動照片</label>
             <photo />
             <BButton pill type="submit">提交</BButton>
         </BForm>
@@ -51,16 +51,17 @@ import axios from 'axios'
 const isToday= ref(true)
 const iconUrl= `${import.meta.env.VITE_STATIC}/product_photo/default_icon.png`
 const data= reactive({
-    icon: null,
-    name: '',
-    date: null,
-    introduction: '',
-    price: '',
+    image: null,
+    title: '',
+    address: '',
+    start_date: null,
+    stop_date: null,
     description: '',
+    url: '',
 });
 // 上傳圖片
 const onFileChange = (event) => {
-    data.icon = event.target.files[0]
+    data.image = event.target.files[0]
 }
 // 載入前執行
 onBeforeMount(()=>{
@@ -81,7 +82,7 @@ onUpdated(()=>{
 const submitForm = () => {
 
     // 提交表單
-    axios.post(`${import.meta.env.VITE_BACKEND}/shop/add/`, data, {
+    axios.post(`${import.meta.env.VITE_BACKEND}/activity/add/`, data, {
         headers: {
         'Content-Type': 'multipart/form-data',
         },

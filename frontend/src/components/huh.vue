@@ -22,7 +22,7 @@ const props= defineProps({
 const memeData= props.optionsData['meme']
 // 載入前執行
 onBeforeMount(()=>{
-
+    
 })
 // 載入後執行
 onMounted(()=>{

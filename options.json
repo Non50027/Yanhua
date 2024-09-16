@@ -1,7 +1,7 @@
 {
     "Navigation": [
         {"name":"關於", "link":"/yanhua"},
-        {"name":"近期活動", "link":"/go"},
+        {"name":"近期活動", "link":"/activity/show"},
         {"name":"二創規範", "link":"/tto"},
         {"name":"什麼意思", "link":"/huh"},
         {"name":"官方周邊", "link":"/shop/show"},

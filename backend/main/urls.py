@@ -3,11 +3,11 @@ from django.urls import path, include
 import member.urls, shop.urls, activity.urls, options.urls, order.urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('member/', include(member.urls)),
-    path('shop/', include(shop.urls)),
-    path('order/', include(order.urls)),
-    path('activity/', include(activity.urls)),
-    path('options/', include(options.urls)),
+    path('api/admin/', admin.site.urls),
+    path('api/member/', include(member.urls)),
+    path('api/shop/', include(shop.urls)),
+    path('api/order/', include(order.urls)),
+    path('api/activity/', include(activity.urls)),
+    path('api/options/', include(options.urls)),
     
 ]

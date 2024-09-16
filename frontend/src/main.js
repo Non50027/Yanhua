@@ -9,9 +9,9 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 import home from './components/home.vue'
 import login from './member/login.vue'
 import member from './member/member.vue'
-import shop from './shop/shop.vue'
+import shop from './shop/show.vue'
 import add from './shop/add/add.vue'
-import go from './activity/go.vue'
+import activity from './activity/show.vue'
 import yanhua from './components/yanhua.vue'
 import huh from './components/huh.vue'
 import tto from './components/tto.vue'
@@ -28,7 +28,7 @@ app.component('login', login)
 app.component('shop', shop)
 app.component('add', add)
 app.component('member', member)
-app.component('go', go)
+app.component('activity', activity)
 app.component('yanhua', yanhua)
 app.component('huh', huh)
 app.component('tto', tto)

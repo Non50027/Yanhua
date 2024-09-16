@@ -6,7 +6,7 @@ switch ($args[0]) {
     "" {
         # 啟動前端
         Push-Location .\frontend
-        Start-Process -NoNewWindow -FilePath "cmd" -ArgumentList "/c yarn dev --host --port 5174" 
+        Start-Process -NoNewWindow -FilePath "cmd" -ArgumentList "/c yarn dev --host --port 5175" 
         Pop-Location
         
         # 執行 Django 的遷移並啟動後端

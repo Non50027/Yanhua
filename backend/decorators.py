@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 from django.db import IntegrityError
 from smtplib import SMTPException, SMTPRecipientsRefused, SMTPSenderRefused, SMTPDataError, SMTPAuthenticationError
 from member.models import Member
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, DisallowedHost  
 
 def try_except(functionName):
     
@@ -14,6 +14,15 @@ def try_except(functionName):
             
             try:
                 return functionName(*args, **kwargs)
+            
+            # 不允許的請求
+            except DisallowedHost as e:
+                host = args[0].get_host()  # 從請求中獲取主機名
+                print(f"不允許的請求 - {host} ")
+                return Response(
+                    {'error': f"The host '{host}' is not allowed. You may have connected to the wrong server or domain."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             
             # 處理會員資料
             except Member.DoesNotExist as e:

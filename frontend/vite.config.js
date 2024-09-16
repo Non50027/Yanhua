@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import path from 'path';
-import fs from 'fs';  // 引入文件系統模塊
+
 // 改變預設 .env 路徑為根目錄下
 const myEnv = dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenvExpand.expand(myEnv);
@@ -14,23 +14,20 @@ for (const key in myEnv.parsed) {
     viteEnv[key] = myEnv.parsed[key];
   }
 }
-
+// 初始化
 export default defineConfig({
   plugins: [vue()],
   define: {
-    'process.env': viteEnv, // 只傳遞以 VITE_ 開頭的變數給 Vite
+    'process.env': viteEnv, // 只傳遞 VITE_ 開頭的變數給 Vite
   },
-  // server: {
-  //   host: true,
-  //   https: {
-  //     key: fs.readFileSync(path.resolve(__dirname, 'N:/nginx-ssl/self-signed.key')),
-  //     cert: fs.readFileSync(path.resolve(__dirname, 'N:/nginx-ssl/self-signed.crt')),
-  //   },
-  //   proxy: {
-  //     '/socket': {
-  //       target: 'wss://localhost:5174',
-  //       ws: true
-  //     }
-  //   }
-  // }
+  server: {
+    hmr: {
+      host: 'yanhua.com.tw',  // 網域名稱
+      port: 5175,  // Vite 運行的端口
+    },
+    https: {
+      key: 'N:\\nginx-ssl\\cloudflare_signed_yanhua.key',
+      cert: 'N:\\nginx-ssl\\cloudflare_signed_yanhua.pem',
+    },
+  }
 })

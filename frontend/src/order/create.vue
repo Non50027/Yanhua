@@ -27,24 +27,18 @@
 import axios from 'axios'
 import login from '../member/login.vue'
 import { getMemberData } from '../services/getData';
-import { useRoute } from 'vue-router';
-import { ref, reactive, computed, onUpdated, onMounted, onBeforeMount } from 'vue'
-// 判斷登入
-const isLogin= ref(sessionStorage.getItem('name'))
-// 會員資料
-const memberData= reactive({})
-// 宣告表單
-const tempFormData= reactive({})
-// 宣告表格
-const table= reactive([])
+import { ref, reactive, computed, onBeforeMount } from 'vue'
+const isLogin= ref(sessionStorage.getItem('name'))  // 判斷登入
+const memberData= reactive({})  // 會員資料
+// const props= defineProps({
+//     memberData:Object,
+//     optionsData:Object
+// })
+const tempFormData= reactive({})    // 宣告表單
+const table= reactive([])   // 宣告表格
+const shoppingCartItems= reactive(JSON.parse(sessionStorage.getItem('shoppingCartItems'))|| [])  // 購物車
 // 載入前執行
 onBeforeMount(async()=>{
-    const props= defineProps({
-        data:{
-            type: Array,
-            default: []
-        }
-    })
     // 響應式表單資料
     if (isLogin){
         Object.assign(memberData, await getMemberData(sessionStorage.getItem('name')))
@@ -54,7 +48,7 @@ onBeforeMount(async()=>{
         tempFormData.address= memberData.address
     }
     // 製作表格
-    data.forEach((item)=>{
+    shoppingCartItems.forEach((item)=>{
         table.push({
             商品名: item.name,
             數量: item.num,
@@ -65,7 +59,7 @@ onBeforeMount(async()=>{
 });
 // 計算總金額
 const total= computed(()=>{
-    return data.reduce((total, item)=> total+item.price*item.num, 0)
+    return shoppingCartItems.reduce((total, item)=> total+item.price*item.num, 0)
 })
 // 表單提交
 const submitForm = () => {
@@ -98,7 +92,6 @@ const submitForm = () => {
         console.log(error.response.data.error)
     })
 }
-
 </script>
 
 <style scoped>

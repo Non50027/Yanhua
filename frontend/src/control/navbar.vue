@@ -1,6 +1,6 @@
 <template>
     <BNavbar fixed="top" toggleable="lg" class="my-navbar">
-        <BNavbarBrand href="/">
+        <BNavbarBrand to="/">
             <img class="logo" :src=logoImg alt="Logo">
         </BNavbarBrand>
         
@@ -26,7 +26,7 @@
 <script setup>
 import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 const loginRef= ref(null)
-const logoImg= `${import.meta.env.VITE_BACKEND}/static/image15.png`
+const logoImg= `${import.meta.env.VITE_STATIC}/image15.png`
 // const isLogin= ref(false)
 const handleClickOutside = (event) => {
     if (loginRef.value && !loginRef.value.$el.contains(event.target)) {

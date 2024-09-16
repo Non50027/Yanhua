@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from decorators import try_except
 from django.conf import settings
 
+
 @api_view(['POST'])
 @try_except
 def save_data(request):
@@ -21,5 +22,3 @@ def get_data(request):
     with open(file_path, 'r', encoding= 'utf-8') as file:
         data= json.load(file)
     return Response(data, status=status.HTTP_200_OK)
-
-    

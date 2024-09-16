@@ -17,16 +17,16 @@ import { ref, reactive, onBeforeMount  } from 'vue'
 import axios from "axios"
 import navbar from './control/navbar.vue'
 import { getMemberData } from './services/getData';
-
-const memberData= reactive({})
-const optionsData= reactive({})
+const memberData= reactive({})  // 會員資料
+const optionsData= reactive({}) // 設定檔
 onBeforeMount (async ()=>{
+  // 取得會員資料
   if (sessionStorage.getItem('name')){
     Object.assign (memberData, await getMemberData(sessionStorage.getItem('name')))
   }
 });
 // 取得設定檔
-(function(){
+(()=>{
   axios.get(`${import.meta.env.VITE_BACKEND}/options/get`)
   .then(response => {
     Object.assign(optionsData, response.data)

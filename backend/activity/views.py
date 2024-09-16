@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import ActivitySerializer, ActivityPhotoSerializer
+from .serializers import CreateActivity, CreateActivityPhoto, GetActivity
 from rest_framework.decorators import api_view
 from decorators import try_except
 from rest_framework.exceptions import ValidationError
@@ -11,8 +11,9 @@ from .models import Activity
 @api_view(['POST'])
 @try_except
 def add_activity(request):
+    print(request.data)
     
-    serializer= ActivitySerializer(data= request.data)
+    serializer= CreateActivity(data= request.data)
     
     if serializer.is_valid():
         serializer.save()
@@ -26,7 +27,7 @@ def add_activity(request):
 @try_except
 def add_photo(request):
     
-    serializer= ActivityPhotoSerializer(data= request.data)
+    serializer= CreateActivityPhoto(data= request.data)
     
     if serializer.is_valid():
         serializer.save()
@@ -40,8 +41,8 @@ def add_photo(request):
 @try_except
 def get_activities(request):
     
-    all_data= [ActivitySerializer(data) for data in Activity.objects.all().iterator()]
-    return Response(all_data)
+    all_data= [GetActivity(data).data for data in Activity.objects.all().iterator()]
+    return Response(all_data, status= status.HTTP_200_OK)
 
 # 更新活動
 @api_view(['PUT'])
@@ -50,7 +51,7 @@ def update_activity(request):
     
     activity= Activity.objects.get(title= request.POST.get('title'))
 
-    serializer= ActivitySerializer(activity, data= request.data)
+    serializer= CreateActivity(activity, data= request.data)
     
     if serializer.is_valid():
         serializer.save()

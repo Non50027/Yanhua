@@ -15,7 +15,7 @@ import { ref, reactive, onMounted } from 'vue'
 
 const props= defineProps(['data'])
 const tempData = reactive({
-    value: '', 
+    value: '',
     show:true
 });
 onMounted(()=>{

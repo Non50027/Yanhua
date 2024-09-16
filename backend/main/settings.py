@@ -14,6 +14,7 @@ import os, json
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
+
 # 讀取 .env
 def load_env(file_path):
     with open(file_path) as f:
@@ -28,9 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 load_env(os.path.join(BASE_DIR, '.env'))
 
-# MEDIA_URL= 'http://localhost:8000/static/'
-# MEDIA_URL= 'http://61.63.220.46:8000/static/'
-MEDIA_URL= 'http://api.yanhua.com.tw/static/'
+MEDIA_URL= 'https://yanhua.com.tw/static/'
 
 MEDIA_ROOT= os.path.join(BASE_DIR, '/YanHua/static/')
 
@@ -38,22 +37,25 @@ MEDIA_ROOT= os.path.join(BASE_DIR, '/YanHua/static/')
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n(0)2mf0s-h^6w4h&+eewipp$ac0+ktk)^88tp3$7mehic6vp9'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# 透過 HTTPS
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://yanhua.com.tw', 'https://www.yanhua.com.tw']
+
 ALLOWED_HOSTS = [
     'yanhua.com.tw',
-    'api.yanhua.com.tw',
-    'localhost',
-    '61.63.220.46'
+    # 'localhost',
+    '127.0.0.1'
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",
-    "http://yanhua.com.tw",
-    # "https://yanhua.com.tw",
+    "https://localhost:5175",
+    "https://yanhua.com.tw",
 ]
 # Application definition
 
@@ -88,7 +90,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:5175",  # 允許來自 Vite 開發伺服器的請求
+    "https://yanhua.com.tw",    # 也可以允許來自自己的請求
+]
 
 ROOT_URLCONF = 'main.urls'
 

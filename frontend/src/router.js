@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import member from './member/member.vue'
-import shop from './shop/shop.vue'
-import add from './shop/add/add.vue'
-import detailed from './shop/detailed.vue'
+import activityShow from './activity/show.vue'
+import activityCreate from './activity/create/create.vue'
+import activityDetailed from './activity/detailed.vue'
+import shopShow from './shop/show.vue'
+import shopAddProduct from './shop/add/add.vue'
+import ProductDetailed from './shop/detailed.vue'
 import create from './order/create.vue'
 import get from './order/get.vue'
-import go from './activity/go.vue'
 import yanhua from './components/yanhua.vue'
 import done from './components/done.vue'
 import huh from './components/huh.vue'
@@ -22,19 +24,19 @@ const routes = [
         path: '/shop',
         children:[
             { 
-                path: 'add',
-                name: 'editProducts',
-                component: add,
-            },
-            { 
                 path: 'show',
                 name: 'showAllProducts',
-                component: shop,
+                component: shopShow,
+            },
+            { 
+                path: 'add',
+                name: 'editProducts',
+                component: shopAddProduct,
             },
             { 
                 path: 'detailed',
                 name: 'detailedPage',
-                component: detailed,
+                component: ProductDetailed,
             },
         ]
     },
@@ -54,8 +56,24 @@ const routes = [
         ]
     },
     { 
-        path: '/go',
-        component: go,
+        path: '/activity',
+        children:[
+            { 
+                path: 'show',
+                name: 'activityShow',
+                component: activityShow,
+            },
+            { 
+                path: 'create',
+                name: 'activityCreate',
+                component: activityCreate,
+            },
+            { 
+                path: 'detailed',
+                name: 'activityDetailedPage',
+                component: activityDetailed,
+            },
+        ]
     },
     { 
         path: '/yanhua',
