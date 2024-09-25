@@ -49,7 +49,7 @@ import { ref, reactive, onUpdated, onMounted, onBeforeMount } from 'vue'
 import photo from './photo.vue'
 import axios from 'axios'
 const isToday= ref(true)
-const iconUrl= `${import.meta.env.VITE_STATIC}/product_photo/default_icon.png`
+const iconUrl= `${import.meta.env.VITE_STATIC}/product_icon.png`
 const data= reactive({
     icon: null,
     name: '',

@@ -16,7 +16,7 @@ def icon_name(instance, file_name):
     
 # 會員
 class Member(models.Model):
-    # 訂單狀態選擇
+    # 會員層級
     class Role(models.TextChoices):
         OWNER= '烟花'
         ADMIN= '小幫手'

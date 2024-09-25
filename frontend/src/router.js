@@ -12,6 +12,7 @@ import yanhua from './components/yanhua.vue'
 import done from './components/done.vue'
 import huh from './components/huh.vue'
 import tto from './components/tto.vue'
+import admin from './components/admin.vue'
 import error from './components/error.vue'
 
 const routes = [
@@ -90,6 +91,10 @@ const routes = [
     { 
         path: '/tto',
         component: tto,
+    },
+    { 
+        path: '/admin',
+        component: admin,
     },
     // { 
     //     path: '/:pathMatch(.*)*',

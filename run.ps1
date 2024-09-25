@@ -6,13 +6,13 @@ switch ($args[0]) {
     "" {
         # 啟動前端
         Push-Location .\frontend
-        Start-Process -NoNewWindow -FilePath "cmd" -ArgumentList "/c yarn dev --host --port 5175" 
+        Start-Process -NoNewWindow -FilePath "cmd" -ArgumentList "/c yarn dev --host --port 5330" 
         Pop-Location
         
         # 執行 Django 的遷移並啟動後端
         python .\\backend\\manage.py makemigrations $args[1]
         python .\\backend\\manage.py migrate $args[1]
-        python .\\backend\\manage.py runserver 0.0.0.0:8000
+        python .\\backend\\manage.py runserver 0.0.0.0:8330
         
     }
     # 生成 freezefile.txt

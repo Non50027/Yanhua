@@ -23,7 +23,7 @@ export default defineConfig({
   server: {
     hmr: {
       host: 'yanhua.com.tw',  // 網域名稱
-      port: 5175,  // Vite 運行的端口
+      port: 5330,  // Vite 運行的端口
     },
     https: {
       key: 'N:\\nginx-ssl\\cloudflare_signed_yanhua.key',

@@ -8,6 +8,7 @@
           <home />
         </BCol>
       </BRow>
+    
     </div>
   
 </template>

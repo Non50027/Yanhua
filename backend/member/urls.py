@@ -1,8 +1,5 @@
 from django.urls import path
-# from append_local.views import test
-
 from member import views
-# from django.views.generic import TemplateView # type: ignore
 
 urlpatterns = [
     
