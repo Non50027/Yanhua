@@ -27,5 +27,6 @@ frontend/.vscode/*
 *.sw?
 
 .env
+key/
 
 .txt

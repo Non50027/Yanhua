@@ -32,7 +32,7 @@ const props= defineProps({
     memberData: Object,
 })
 const isLogin = ref(!!sessionStorage.getItem('name'))   // 檢查登入狀態
-const isAdmin= (isLogin && (props.memberData.role != 'member'))   // 判斷登入者為管理員
+const isAdmin= (isLogin || (props.memberData.role != 'member'))   // 判斷登入者為管理員
 const loginRef= ref(null)
 const logoImg= `${import.meta.env.VITE_STATIC}/image15.png`
 // const isLogin= ref(false)

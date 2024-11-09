@@ -12,7 +12,9 @@ import yanhua from './components/yanhua.vue'
 import done from './components/done.vue'
 import huh from './components/huh.vue'
 import tto from './components/tto.vue'
-import admin from './components/admin.vue'
+import admin from './admin/admin-index.vue'
+import admin_order from './admin/order-management.vue'
+import admin_member from './admin/member-management.vue'
 import error from './components/error.vue'
 
 const routes = [
@@ -94,7 +96,20 @@ const routes = [
     },
     { 
         path: '/admin',
+        name: 'admin-index',
         component: admin,
+        children:[
+            { 
+                path: 'member',
+                name: 'admin-member',
+                component: admin_member,
+            },
+            { 
+                path: 'order',
+                name: 'admin-order',
+                component: admin_order,
+            },
+        ]
     },
     // { 
     //     path: '/:pathMatch(.*)*',

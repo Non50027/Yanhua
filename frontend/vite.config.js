@@ -26,8 +26,8 @@ export default defineConfig({
       port: 5330,  // Vite 運行的端口
     },
     https: {
-      key: 'N:\\nginx-ssl\\cloudflare_signed_yanhua.key',
-      cert: 'N:\\nginx-ssl\\cloudflare_signed_yanhua.pem',
+      key: 'D:\\Yanhua\\key\\origin.key',
+      cert: 'D:\\Yanhua\\key\\origin.pem',
     },
   }
 })

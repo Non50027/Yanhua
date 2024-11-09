@@ -6,6 +6,7 @@
         </BCol>
         <BCol md="12">
           <home />
+          <!-- <div class="h1">幫我的小烏龜更新中...暫時不更新</div> -->
         </BCol>
       </BRow>
     
