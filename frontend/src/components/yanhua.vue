@@ -1,11 +1,13 @@
 <template>
-    <div class="title mb-3">烟花蹦蹦蹦 ch.YanHua</div>
-    <div v-for="(value, index) in baseData" :key="index">
-        <p>{{ value[0] }}：{{ value[1] }}</p>
-    </div>
-    <div class="mb-3" v-html="introduction"></div>
-    <div v-for="(value, index) in tagsData" :key="index">
-        <p>{{ value[0] }} <BBadge pill variant="dark">{{value[1]}}</BBadge></p>
+    <div>
+        <div class="title mb-3">烟花蹦蹦蹦 ch.YanHua</div>
+        <div v-for="(value, index) in baseData" :key="index">
+            <p>{{ value[0] }}：{{ value[1] }}</p>
+        </div>
+        <div class="mb-3" v-html="introduction"></div>
+        <div v-for="(value, index) in tagsData" :key="index">
+            <p>{{ value[0] }} <BBadge pill variant="dark">{{value[1]}}</BBadge></p>
+        </div>
     </div>
 </template>
 

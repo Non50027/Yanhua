@@ -1,27 +1,29 @@
 <template>
-    <BNavbar fixed="top" toggleable="lg" class="my-navbar">
-        <BNavbarBrand to="/">
-            <img class="logo" :src=logoImg alt="Logo">
-        </BNavbarBrand>
-        
-        <BCollapse id="nav-collapse" is-nav v-model="onSwitch">
-            <BNavbarNav>
-                <BNavItem v-if="isLogin" to="/member" @click="onSwitch= !onSwitch">
-                    {{ memberData.display_name ? memberData.display_name : memberData.name }}
-                </BNavItem>
-                <BNavItem v-for="(item, index) in optionsData.Navigation" :key="index" :[isHref(item.link)]="item.link" @click="onSwitch= !onSwitch">
-                    {{item.name}}
-                </BNavItem>
-                <BNavItem v-if="isAdmin" to="/admin" @click="onSwitch= !onSwitch">管理</BNavItem>
-            </BNavbarNav>
-        </BCollapse>
-        <BButton pill v-if="!isLogin" @click.stop="onLogin= !onLogin" class="ms-auto">
-            {{onLogin?'取消':'戴上命名牌'}}
-        </BButton>
-        <login v-if="onLogin" class="levitated-windows" ref="loginRef"/>
-        <BNavbarToggle target="nav-collapse" />
-    </BNavbar>
-    <div class="router-content"><router-view :optionsData="optionsData" :memberData="memberData"/></div>
+    <div>
+        <BNavbar fixed="top" toggleable="lg" class="my-navbar">
+            <BNavbarBrand to="/">
+                <img class="logo" :src=logoImg alt="Logo">
+            </BNavbarBrand>
+            
+            <BCollapse id="nav-collapse" is-nav v-model="onSwitch">
+                <BNavbarNav>
+                    <BNavItem v-if="isLogin" to="/member" @click="onSwitch= !onSwitch">
+                        {{ memberData.display_name ? memberData.display_name : memberData.name }}
+                    </BNavItem>
+                    <BNavItem v-for="(item, index) in optionsData.Navigation" :key="index" :[isHref(item.link)]="item.link" @click="onSwitch= !onSwitch">
+                        {{item.name}}
+                    </BNavItem>
+                    <BNavItem v-if="isAdmin" to="/admin" @click="onSwitch= !onSwitch">管理</BNavItem>
+                </BNavbarNav>
+            </BCollapse>
+            <BButton pill v-if="!isLogin" @click.stop="onLogin= !onLogin" class="ms-auto">
+                {{onLogin?'取消':'戴上命名牌'}}
+            </BButton>
+            <login v-if="onLogin" class="levitated-windows" ref="loginRef"/>
+            <BNavbarToggle target="nav-collapse" />
+        </BNavbar>
+        <div class="router-content"><router-view :optionsData="optionsData" :memberData="memberData"/></div>
+    </div>
 </template>
 
 <script setup>
@@ -34,7 +36,7 @@ const props= defineProps({
 const isLogin = ref(!!sessionStorage.getItem('name'))   // 檢查登入狀態
 const isAdmin= (isLogin || (props.memberData.role != 'member'))   // 判斷登入者為管理員
 const loginRef= ref(null)
-const logoImg= `${import.meta.env.VITE_STATIC}/image15.png`
+const logoImg= `${import.meta.env.VITE_STATIC}/yanhua_logo.png`
 // const isLogin= ref(false)
 const handleClickOutside = (event) => {
     if (loginRef.value && !loginRef.value.$el.contains(event.target)) {

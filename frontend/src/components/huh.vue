@@ -1,15 +1,17 @@
 <template>
-    <div class="title">聊天室迷因</div>
-    <div v-for="(value, index) in memeData['content']" :key="index">
-        <img :src="value.imgUrl" alt="meme image">
-        <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
-        <p>{{value.value}}</p>
-    </div>
-    <div class="title">精華迷因</div>
-    <div v-for="(value, index) in memeData['video']" :key="index">
-        <a :href="value.videoUrl"><img :src="value.iconUrl" alt="meme image"></a>
-        <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
-        <p></p>
+    <div>
+        <div class="title">聊天室迷因</div>
+        <div v-for="(value, index) in memeData['content']" :key="index">
+            <img :src="value.imgUrl" alt="meme image">
+            <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
+            <p>{{value.value}}</p>
+        </div>
+        <div class="title">精華迷因</div>
+        <div v-for="(value, index) in memeData['video']" :key="index">
+            <a :href="value.videoUrl"><img :src="value.iconUrl" alt="meme image"></a>
+            <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
+            <p></p>
+        </div>
     </div>
 </template>
 

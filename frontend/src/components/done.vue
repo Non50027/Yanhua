@@ -1,10 +1,12 @@
 <template>
-    <h1>done</h1>
-    <div v-for="(value, index) in optionsData['done']" :key="index">
-        <a :href="value.link">
-            <img :src="value.imgUrl" alt="link">
-            <p>{{ value.name }}</p>
-        </a>
+    <div>
+        <h1>done</h1>
+        <div v-for="(value, index) in optionsData['done']" :key="index">
+            <a :href="value.link">
+                <img :src="value.imgUrl" alt="link">
+                <p>{{ value.name }}</p>
+            </a>
+        </div>
     </div>
 </template>
 

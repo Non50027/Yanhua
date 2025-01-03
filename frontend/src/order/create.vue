@@ -1,25 +1,27 @@
 <template>
-    <BTable striped hover :items="table" ></BTable>
-    <p class="total-price">$ {{ total }}</p>
-    <login v-if="!isLogin" />
-    <div v-if="isLogin">
-        <BForm @submit.prevent="submitForm">
-            <BRow>
-                <BCol>
-                    <label>收件人</label>
-                    <BFormInput type="text" v-model="tempFormData.name" />
-                </BCol>
-                <BCol>
-                    <label>信箱</label>
-                    <BFormInput type="text" v-model="tempFormData.email" disabled/>
-                </BCol>
-            </BRow>
-            <label>電話</label>
-            <BFormInput type="text" v-model="tempFormData.tel"/>
-            <label>地址</label>
-            <BFormInput type="text" v-model="tempFormData.address"/>
-            <BButton type="submit">確認結帳</BButton>
-        </BForm>
+    <div>
+        <BTable striped hover :items="table" ></BTable>
+        <p class="total-price">$ {{ total }}</p>
+        <login v-if="!isLogin" />
+        <div v-if="isLogin">
+            <BForm @submit.prevent="submitForm">
+                <BRow>
+                    <BCol>
+                        <label>收件人</label>
+                        <BFormInput type="text" v-model="tempFormData.name" />
+                    </BCol>
+                    <BCol>
+                        <label>信箱</label>
+                        <BFormInput type="text" v-model="tempFormData.email" disabled/>
+                    </BCol>
+                </BRow>
+                <label>電話</label>
+                <BFormInput type="text" v-model="tempFormData.tel"/>
+                <label>地址</label>
+                <BFormInput type="text" v-model="tempFormData.address"/>
+                <BButton type="submit">確認結帳</BButton>
+            </BForm>
+        </div>
     </div>
 </template>
 

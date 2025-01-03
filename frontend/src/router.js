@@ -15,6 +15,7 @@ import tto from './components/tto.vue'
 import admin from './admin/admin-index.vue'
 import admin_order from './admin/order-management.vue'
 import admin_member from './admin/member-management.vue'
+import sound from './components/sound.vue'
 import error from './components/error.vue'
 
 const routes = [
@@ -85,6 +86,10 @@ const routes = [
     { 
         path: '/done',
         component: done,
+    },
+    { 
+        path: '/sound',
+        component: sound,
     },
     { 
         path: '/huh',

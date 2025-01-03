@@ -1,47 +1,49 @@
 <template>
 
-    <BButton class="mb-3 cart-button" pill @click.stop="shopCartButton= true" >購物車</BButton>
-    <cart v-if="shopCartButton" class="levitated-windows" :class="setShoppingCartSize" ref="shoppingCartRef" />
-
-    <BContainer>
-        <BLink v-if="isAdmin" to="add"><BButton pill class="mb-3">新商品</BButton></BLink>
-
-        <b-input-group prepend="查詢訂單" class="mb-3">
-            <BFormInput v-model="findOrderId"></BFormInput>
-            <BLink :to="{ name: 'orderGet', query: { orderId: findOrderId } }"><BButton>搜尋</BButton></BLink>
-        </b-input-group>
-
-        <BRow>
-            <BCol v-for="(item, index) in allProductsData" :key="index" cols="12" md="6" xl="4">
-                <BCard no-body class="mb-5 my-card" :class="setCardSize" tag="article" border-variant="success" @click.stop="showDetailed(item)">
-                    <BCardImg class="h-50" :src="item.icon" :alt="item.name"/>
-                    <BCardBody class="h-25">
-                        <BCardTitle class="title">{{ item.name }}</BCardTitle>
-                        <BCardText class="context">{{ item.introduction }}</BCardText>
-                        <BCardText class="context price">{{ `$ ${item.price}` }}</BCardText>
-                        <BRow>
-                            <BCol><BCardText class="context">{{ `剩餘數量:${item.count}` }}</BCardText></BCol>
-                            <BCol class="d-md-none">
-                                <BLink :to="{name: 'detailedPage', query:detailedPageQuery(item)}">
-                                    <BButton pill @click.stop>查看詳情</BButton>
-                                </BLink>
-                            </BCol>
-                            <BCol><BButton pill @click.stop="addShoppingCartItems(item)">加購物車</BButton></BCol>
-                        </BRow>
-                    </BCardBody>
-                    <template v-if="isAdmin" v-slot:footer>
-                        <BRow>
-                            <BCol><BLink :to="{name: 'editProducts', query: editProductQuery(item)}">
-                                <BButton pill @click.stop>編輯</BButton>
-                            </BLink></BCol>
-                            <BCol><BButton pill @click.stop>刪除</BButton></BCol>
-                        </BRow>
-                    </template>
-                </BCard>
-            </BCol>
-        </BRow>
-        <detailed v-if="selectedItem" class="levitated-windows detailed-windows d-none d-md-block" :data="selectedItem" ref="detailedPageRef" @close="closeDetailed" />
-    </BContainer>
+    <div>
+        <BButton class="mb-3 cart-button" pill @click.stop="shopCartButton= true" >購物車</BButton>
+        <cart v-if="shopCartButton" class="levitated-windows" :class="setShoppingCartSize" ref="shoppingCartRef" />
+    
+        <BContainer>
+            <BLink v-if="isAdmin" to="add"><BButton pill class="mb-3">新商品</BButton></BLink>
+    
+            <b-input-group prepend="查詢訂單" class="mb-3">
+                <BFormInput v-model="findOrderId"></BFormInput>
+                <BLink :to="{ name: 'orderGet', query: { orderId: findOrderId } }"><BButton>搜尋</BButton></BLink>
+            </b-input-group>
+    
+            <BRow>
+                <BCol v-for="(item, index) in allProductsData" :key="index" cols="12" md="6" xl="4">
+                    <BCard no-body class="mb-5 my-card" :class="setCardSize" tag="article" border-variant="success" @click.stop="showDetailed(item)">
+                        <BCardImg class="h-50" :src="item.icon" :alt="item.name"/>
+                        <BCardBody class="h-25">
+                            <BCardTitle class="title">{{ item.name }}</BCardTitle>
+                            <BCardText class="context">{{ item.introduction }}</BCardText>
+                            <BCardText class="context price">{{ `$ ${item.price}` }}</BCardText>
+                            <BRow>
+                                <BCol><BCardText class="context">{{ `剩餘數量:${item.count}` }}</BCardText></BCol>
+                                <BCol class="d-md-none">
+                                    <BLink :to="{name: 'detailedPage', query:detailedPageQuery(item)}">
+                                        <BButton pill @click.stop>查看詳情</BButton>
+                                    </BLink>
+                                </BCol>
+                                <BCol><BButton pill @click.stop="addShoppingCartItems(item)">加購物車</BButton></BCol>
+                            </BRow>
+                        </BCardBody>
+                        <template v-if="isAdmin" v-slot:footer>
+                            <BRow>
+                                <BCol><BLink :to="{name: 'editProducts', query: editProductQuery(item)}">
+                                    <BButton pill @click.stop>編輯</BButton>
+                                </BLink></BCol>
+                                <BCol><BButton pill @click.stop>刪除</BButton></BCol>
+                            </BRow>
+                        </template>
+                    </BCard>
+                </BCol>
+            </BRow>
+            <detailed v-if="selectedItem" class="levitated-windows detailed-windows d-none d-md-block" :data="selectedItem" ref="detailedPageRef" @close="closeDetailed" />
+        </BContainer>
+    </div>
 </template>
 
 <script setup>

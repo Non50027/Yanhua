@@ -1,8 +1,10 @@
 <template>
-    <BButton pill class="mb-3" v-if="(memberData.name && (memberData.role != 'member'))" @click="switchShow= !switchShow">{{switchShow?'編輯模式':'退出'}}</BButton>
-    <div v-for="(value, index) in ttoData" :key="index">
-        <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
-        <p>{{value.value}}</p>
+    <div>
+        <BButton pill class="mb-3" v-if="(memberData.name && (memberData.role != 'member'))" @click="switchShow= !switchShow">{{switchShow?'編輯模式':'退出'}}</BButton>
+        <div v-for="(value, index) in ttoData" :key="index">
+            <p>{{ value.title }} <BBadge pill variant="dark">{{ value.tag }}</BBadge></p>
+            <p>{{value.value}}</p>
+        </div>
     </div>
 </template>
 
